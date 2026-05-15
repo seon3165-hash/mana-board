@@ -555,7 +555,6 @@ if (!myTeam) {
 { top: "85%", left: "65%" },
 { top: "85%", left: "75%" },
 { top: "85%", left: "85%" },
-{ top: "85%", left: "95%" },
 
   // 오른쪽
   { top: "72%", left: "85%" },
@@ -581,6 +580,7 @@ if (!myTeam) {
   { top: "46%", left: "5%" },
   { top: "59%", left: "5%" },
   { top: "72%", left: "5%" },
+  { top: "85%", left: "5%" },
 ];
 
     const position =
