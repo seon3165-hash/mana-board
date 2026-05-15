@@ -16,41 +16,29 @@ export default function Home() {
   { name: "서울", price: 100 },
   { name: "도쿄", price: 120 },
   { name: "베이징", price: 140 },
-
-  { name: "이벤트", price: 0 },
-
   { name: "방콕", price: 160 },
   { name: "싱가포르", price: 180 },
-  { name: "자카르타", price: 200 },
 
-  { name: "세금", price: 0 },
+  { name: "이벤트", price: 0 },
 
   { name: "두바이", price: 220 },
   { name: "이스탄불", price: 240 },
   { name: "카이로", price: 260 },
-
-  { name: "행운", price: 0 },
-
   { name: "파리", price: 280 },
   { name: "런던", price: 300 },
+
+  { name: "세금", price: 0 },
+
   { name: "로마", price: 320 },
-
-  { name: "무인도", price: 0 },
-
   { name: "뉴욕", price: 340 },
   { name: "토론토", price: 360 },
   { name: "멕시코시티", price: 380 },
 
-  { name: "축제", price: 0 },
+  { name: "행운", price: 0 },
 
   { name: "리우데자네이루", price: 400 },
   { name: "시드니", price: 420 },
-  { name: "케이프타운", price: 440 },
-
-  { name: "블랙홀", price: 0 },
-
   { name: "홍콩", price: 460 },
-  { name: "로스앤젤레스", price: 480 },
   { name: "상하이", price: 500 },
 ];
 
@@ -546,35 +534,49 @@ if (!myTeam) {
     const owner = getOwner(tile.name);
 
     const positions = [
+  // 아래
+  { top: "85%", left: "0%" },
+
   { top: "85%", left: "5%" },
-  { top: "85%", left: "18%" },
-  { top: "85%", left: "31%" },
-  { top: "85%", left: "44%" },
-  { top: "85%", left: "57%" },
-  { top: "85%", left: "70%" },
-  { top: "85%", left: "83%" },
+  { top: "85%", left: "15%" },
+  { top: "85%", left: "25%" },
+  { top: "85%", left: "35%" },
+  { top: "85%", left: "45%" },
+  { top: "85%", left: "55%" },
+  { top: "85%", left: "65%" },
+  { top: "85%", left: "75%" },
+  { top: "85%", left: "85%" },
 
-  { top: "70%", left: "83%" },
-  { top: "55%", left: "83%" },
-  { top: "40%", left: "83%" },
-  { top: "25%", left: "83%" },
-  { top: "10%", left: "83%" },
+  // 오른쪽
+  { top: "72%", left: "85%" },
+  { top: "59%", left: "85%" },
+  { top: "46%", left: "85%" },
+  { top: "33%", left: "85%" },
+  { top: "20%", left: "85%" },
+  { top: "7%", left: "85%" },
 
-  { top: "10%", left: "70%" },
-  { top: "10%", left: "57%" },
-  { top: "10%", left: "44%" },
-  { top: "10%", left: "31%" },
-  { top: "10%", left: "18%" },
-  { top: "10%", left: "5%" },
+  // 위
+  { top: "7%", left: "75%" },
+  { top: "7%", left: "65%" },
+  { top: "7%", left: "55%" },
+  { top: "7%", left: "45%" },
+  { top: "7%", left: "35%" },
+  { top: "7%", left: "25%" },
+  { top: "7%", left: "15%" },
+  { top: "7%", left: "5%" },
 
-  { top: "25%", left: "5%" },
-  { top: "40%", left: "5%" },
-  { top: "55%", left: "5%" },
-  { top: "70%", left: "5%" },
+  // 왼쪽
+  { top: "20%", left: "5%" },
+  { top: "33%", left: "5%" },
+  { top: "46%", left: "5%" },
+  { top: "59%", left: "5%" },
+  { top: "72%", left: "5%" },
 ];
 
     const position =
-      positions[index % positions.length];
+  positions[
+    index % positions.length
+  ];
 
     return (
       <div
