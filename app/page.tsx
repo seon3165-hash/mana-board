@@ -517,7 +517,6 @@ if (
     <main
   className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto"
   style={{
-    backgroundImage: "url('/board.png')",
   }}
 >
       <h1 className="text-4xl font-bold mb-6">
