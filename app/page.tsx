@@ -591,7 +591,7 @@ if (
 
     const position =
   positions[
-    (index + 8) %
+    (index + 9) %
       positions.length
   ];
 
