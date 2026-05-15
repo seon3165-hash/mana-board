@@ -694,7 +694,7 @@ if (!myTeam) {
           : " 없음"}
       </p>
 
-      {isAdmin && (
+      
   <div className="flex flex-col gap-2">
     <input
       type="number"
@@ -753,7 +753,6 @@ if (!myTeam) {
       마나 지급
     </button>
   </div>
-)}
     </div>
   ))}
 </div>
