@@ -552,7 +552,6 @@ if (
 
     const positions = [
   // 아래
-{ top: "85%", left: "0%" },
 { top: "85%", left: "15%" },
 { top: "85%", left: "25%" },
 { top: "85%", left: "35%" },
@@ -587,11 +586,13 @@ if (
   { top: "59%", left: "5%" },
   { top: "72%", left: "5%" },
   { top: "85%", left: "5%" },
+
+  { top: "85%", left: "0%" },
 ];
 
     const position =
   positions[
-    (index + 9) %
+    (index + 5) %
       positions.length
   ];
 
