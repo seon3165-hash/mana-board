@@ -15,30 +15,41 @@ export default function Home() {
 
   { name: "서울", price: 100 },
   { name: "도쿄", price: 120 },
-  { name: "베이징", price: 140 },
-  { name: "방콕", price: 160 },
-  { name: "싱가포르", price: 180 },
 
   { name: "이벤트", price: 0 },
+
+  { name: "방콕", price: 160 },
+  { name: "싱가포르", price: 180 },
+  { name: "자카르타", price: 200 },
+
+  { name: "세금", price: 0 },
 
   { name: "두바이", price: 220 },
   { name: "이스탄불", price: 240 },
   { name: "카이로", price: 260 },
+
+  { name: "행운", price: 0 },
+
   { name: "파리", price: 280 },
   { name: "런던", price: 300 },
-
-  { name: "세금", price: 0 },
-
   { name: "로마", price: 320 },
+
+  { name: "무인도", price: 0 },
+
   { name: "뉴욕", price: 340 },
   { name: "토론토", price: 360 },
   { name: "멕시코시티", price: 380 },
 
-  { name: "행운", price: 0 },
+  { name: "축제", price: 0 },
 
   { name: "리우데자네이루", price: 400 },
   { name: "시드니", price: 420 },
+  { name: "케이프타운", price: 440 },
+
+  { name: "블랙홀", price: 0 },
+
   { name: "홍콩", price: 460 },
+  { name: "로스앤젤레스", price: 480 },
   { name: "상하이", price: 500 },
 ];
 
