@@ -585,7 +585,7 @@ if (!myTeam) {
 
     const position =
   positions[
-    (index + 1) %
+    (index + 6) %
       positions.length
   ];
 
