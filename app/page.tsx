@@ -7,15 +7,9 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore";
-import { useSearchParams }
-  from "next/navigation";
 
 export default function Home() {
-  const searchParams =
-  useSearchParams();
 
-const teamParam =
-  searchParams.get("team");
   const board = [
   { name: "시작", price: 0 },
 
@@ -114,10 +108,18 @@ const [isAdmin, setIsAdmin] =
 const [myTeam, setMyTeam] =
   useState("");
   useEffect(() => {
-  if (teamParam) {
-    setMyTeam(teamParam);
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const team =
+    params.get("team");
+
+  if (team) {
+    setMyTeam(team);
   }
-}, [teamParam]);
+}, []);
 const myIndex = teams.findIndex(
   (team) =>
     team.name.trim() ===
@@ -161,9 +163,6 @@ const currentTeam =
     setMyTeam(savedTeam);
   }
 }, []);
-  console.log(myTeam);
-console.log(myIndex);
-console.log(currentTeam);
 useEffect(() => {
   const loadGame = async () => {
     const gameRef = doc(
@@ -471,7 +470,7 @@ const resetGame = async () => {
   );
 };
 
-if (!myTeam && !teamParam) {
+if (!myTeam) {
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
