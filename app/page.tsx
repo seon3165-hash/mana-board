@@ -236,13 +236,13 @@ if (landedLand.name === "블랙홀") {
       );
     }
 
-    setLogs(newLogs);
+    setLogs(newLogs.slice(0, 20));
 
 setTeams(updatedTeams);
 
 await saveGame(
   updatedTeams,
-  newLogs,
+  newLogs.slice(0, 20),
   currentTurn
 );
   };
@@ -538,27 +538,31 @@ if (!myTeam) {
       </div>
 
       <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
-        <h2 className="text-2xl font-bold mb-4">
-          🎲 주사위
-        </h2>
+  <h2 className="text-2xl font-bold mb-4">
+    🎲 주사위
+  </h2>
 
-        <div className="text-6xl font-bold mb-4">
-          {dice}
-        </div>
+  <div className="text-6xl font-bold mb-4">
+    {dice}
+  </div>
 
-        <button
-          onClick={rollDice}
-          className="bg-blue-500 px-6 py-3 rounded-xl text-lg font-bold mr-4"
-        >
-          주사위 굴리기
-        </button>
+  {currentTeam.name === myTeam && (
+    <>
+      <button
+        onClick={rollDice}
+        className="bg-blue-500 px-6 py-3 rounded-xl text-lg font-bold mr-4"
+      >
+        주사위 굴리기
+      </button>
 
-        <button
-          onClick={nextTurn}
-          className="bg-purple-500 px-6 py-3 rounded-xl text-lg font-bold"
-        >
-          턴 종료
-        </button>
+      <button
+        onClick={nextTurn}
+        className="bg-purple-500 px-6 py-3 rounded-xl text-lg font-bold"
+      >
+        턴 종료
+      </button>
+    </>
+  )}
         {isAdmin && (
   <button
     onClick={resetGame}
@@ -574,12 +578,12 @@ if (!myTeam) {
           게임 로그
         </h2>
 
-        <div className="space-y-2">
+        <div className="space-y-2 max-h-96 overflow-y-auto">
           {logs.length === 0 && (
             <p>아직 로그가 없습니다.</p>
           )}
 
-          {logs.map((log, index) => (
+          {logs.slice(0, 10).map((log, index) => (
             <div
               key={index}
               className="bg-zinc-700 p-2 rounded-lg"
