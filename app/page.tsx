@@ -469,7 +469,13 @@ const resetGame = async () => {
   );
 };
 
-if (!myTeam) {
+if (
+  !myTeam &&
+  typeof window !== "undefined" &&
+  !window.location.search.includes(
+    "team="
+  )
+) {
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
@@ -585,7 +591,7 @@ if (!myTeam) {
 
     const position =
   positions[
-    (index + 6) %
+    (index + 8) %
       positions.length
   ];
 
