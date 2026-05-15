@@ -551,17 +551,19 @@ if (
     const owner = getOwner(tile.name);
 
     const positions = [
-  //시작
-  { top: "85%", left: "0%" },
+
+  // 시작
+  { top: "85%", left: "5%" },
+
   // 아래
-{ top: "85%", left: "15%" },
-{ top: "85%", left: "25%" },
-{ top: "85%", left: "35%" },
-{ top: "85%", left: "45%" },
-{ top: "85%", left: "55%" },
-{ top: "85%", left: "65%" },
-{ top: "85%", left: "75%" },
-{ top: "85%", left: "85%" },
+  { top: "85%", left: "15%" },
+  { top: "85%", left: "25%" },
+  { top: "85%", left: "35%" },
+  { top: "85%", left: "45%" },
+  { top: "85%", left: "55%" },
+  { top: "85%", left: "65%" },
+  { top: "85%", left: "75%" },
+  { top: "85%", left: "85%" },
 
   // 오른쪽
   { top: "72%", left: "85%" },
@@ -582,15 +584,11 @@ if (
   { top: "7%", left: "5%" },
 
   // 왼쪽
-{ top: "10%", left: "5%" },
-{ top: "23%", left: "5%" },
-{ top: "36%", left: "5%" },
-{ top: "49%", left: "5%" },
-{ top: "58%", left: "5%" },
-{ top: "71%", left: "5%" },
-
-  //시작
-  { top: "85%", left: "0%" },
+  { top: "20%", left: "5%" },
+  { top: "33%", left: "5%" },
+  { top: "46%", left: "5%" },
+  { top: "59%", left: "5%" },
+  { top: "72%", left: "5%" },
 ];
 
     const position =
