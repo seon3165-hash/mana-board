@@ -99,9 +99,9 @@ const [scoreInputs, setScoreInputs] =
     }))
   );
 const activityRewards = {
-  "1번활동": 1,
-  "2번활동": 100,
-  "3번활동": 1000,
+  "단순": 1,
+  "유효": 100,
+  "침례": 1000,
 };
 const [isAdmin, setIsAdmin] =
   useState(false);
@@ -540,51 +540,79 @@ if (!myTeam) {
 </h2>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 mb-6">
-        {board.map((tile, index) => {
-          const owner = getOwner(tile.name);
+      <div className="relative w-full h-[900px] bg-zinc-900 rounded-3xl mb-6">
 
-          return (
-            <div
-              key={index}
-              className={`p-4 rounded-2xl text-center ${
-  owner
-    ? owner.color
-    : "bg-zinc-800"
-}`}
-            >
-              <div className="font-bold">
-                {tile.name}
+  {board.map((tile, index) => {
+    const owner = getOwner(tile.name);
+
+    const positions = [
+      { top: "80%", left: "5%" },
+      { top: "80%", left: "20%" },
+      { top: "80%", left: "35%" },
+      { top: "80%", left: "50%" },
+      { top: "80%", left: "65%" },
+      { top: "80%", left: "80%" },
+
+      { top: "60%", left: "80%" },
+      { top: "40%", left: "80%" },
+      { top: "20%", left: "80%" },
+
+      { top: "20%", left: "60%" },
+      { top: "20%", left: "40%" },
+      { top: "20%", left: "20%" },
+
+      { top: "40%", left: "5%" },
+      { top: "60%", left: "5%" },
+    ];
+
+    const position =
+      positions[index % positions.length];
+
+    return (
+      <div
+        key={index}
+        className={`absolute w-28 h-28 rounded-2xl p-2 text-center border-4 ${
+          owner
+            ? owner.color
+            : "bg-zinc-800"
+        }`}
+        style={{
+          top: position.top,
+          left: position.left,
+        }}
+      >
+        <div className="font-bold text-sm">
+          {tile.name}
+        </div>
+
+        <div className="text-xs">
+          {tile.price > 0
+            ? `${tile.price}`
+            : "특수"}
+        </div>
+
+        {owner && (
+          <div className="text-xs mt-1">
+            🏠 {owner.name}
+          </div>
+        )}
+
+        <div className="text-xs mt-1">
+          {teams
+            .filter(
+              (team) =>
+                team.position === index
+            )
+            .map((team) => (
+              <div key={team.name}>
+                🚶
               </div>
-
-              <div className="text-sm mt-1">
-                {tile.price > 0
-                  ? `${tile.price} 마나`
-                  : "특수칸"}
-              </div>
-
-              {owner && (
-                <div className="mt-2 text-xs">
-                  🏠 {owner.name}
-                </div>
-              )}
-
-              <div className="mt-2 text-sm">
-                {teams
-                  .filter(
-                    (team) =>
-                      team.position === index
-                  )
-                  .map((team) => (
-                    <div key={team.name}>
-                      🚶 {team.name}
-                    </div>
-                  ))}
-              </div>
-            </div>
-          );
-        })}
+            ))}
+        </div>
       </div>
+    );
+  })}
+</div>
 
       <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
         <h2 className="text-2xl font-bold mb-4">
@@ -698,7 +726,7 @@ if (!myTeam) {
   <div className="flex flex-col gap-2">
     <input
       type="number"
-      placeholder="1번 활동"
+      placeholder="단순"
       value={scoreInputs[index].activity1}
       onChange={(e) => {
         const updated = [...scoreInputs];
@@ -713,7 +741,7 @@ if (!myTeam) {
 
     <input
       type="number"
-      placeholder="2번 활동"
+      placeholder="유효"
       value={scoreInputs[index].activity2}
       onChange={(e) => {
         const updated = [...scoreInputs];
@@ -728,7 +756,7 @@ if (!myTeam) {
 
     <input
       type="number"
-      placeholder="3번 활동"
+      placeholder="침례"
       value={scoreInputs[index].activity3}
       onChange={(e) => {
         const updated = [...scoreInputs];
