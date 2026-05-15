@@ -15,7 +15,6 @@ export default function Home() {
 
   { name: "서울", price: 100 },
   { name: "일본", price: 120 },
-  { name: "대만", price: 140 },
   { name: "이벤트", price: 0 },
 
   { name: "방콕", price: 160 },
@@ -45,8 +44,6 @@ export default function Home() {
   { name: "리우데자네이루", price: 400 },
   { name: "시드니", price: 420 },
   { name: "케이프타운", price: 440 },
-
-  { name: "블랙홀", price: 0 },
 
   { name: "홍콩", price: 460 },
   { name: "로스앤젤레스", price: 480 },
@@ -556,7 +553,6 @@ if (
   { top: "85%", left: "5%" },
 
   // 아래
-  { top: "85%", left: "15%" },
   { top: "85%", left: "25%" },
   { top: "85%", left: "35%" },
   { top: "85%", left: "45%" },
@@ -574,7 +570,6 @@ if (
   { top: "7%", left: "85%" },
 
   // 위
-  { top: "7%", left: "75%" },
   { top: "7%", left: "65%" },
   { top: "7%", left: "55%" },
   { top: "7%", left: "45%" },
