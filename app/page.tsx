@@ -551,6 +551,8 @@ if (
     const owner = getOwner(tile.name);
 
     const positions = [
+  //시작
+  { top: "85%", left: "0%" },
   // 아래
 { top: "85%", left: "15%" },
 { top: "85%", left: "25%" },
@@ -584,18 +586,15 @@ if (
 { top: "23%", left: "5%" },
 { top: "36%", left: "5%" },
 { top: "49%", left: "5%" },
-{ top: "62%", left: "5%" },
-{ top: "75%", left: "5%" },
+{ top: "58%", left: "5%" },
+{ top: "71%", left: "5%" },
 
   //시작
   { top: "85%", left: "0%" },
 ];
 
     const position =
-  positions[
-    (index + 5) %
-      positions.length
-  ];
+  positions[index];
 
     return (
       <div
