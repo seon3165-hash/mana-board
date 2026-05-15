@@ -579,10 +579,12 @@ if (
   { top: "40%", left: "-2%" },
   { top: "56%", left: "-2%" },
   { top: "72%", left: "-2%" },
+  { top: "85%", left: "-2%" },
 ];
 
     const position =
-  positions[index];
+  positions[index] ||
+  positions[0];
 
     return (
       <div
