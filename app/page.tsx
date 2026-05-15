@@ -7,8 +7,15 @@ import {
   setDoc,
   getDoc,
 } from "firebase/firestore";
+import { useSearchParams }
+  from "next/navigation";
 
 export default function Home() {
+  const searchParams =
+  useSearchParams();
+
+const teamParam =
+  searchParams.get("team");
   const board = [
   { name: "시작", price: 0 },
 
@@ -84,20 +91,79 @@ export default function Home() {
     },
   ]);
 
-  const [currentTurn, setCurrentTurn] =
-    useState(0);
-
   const [dice, setDice] = useState(1);
 
   const [logs, setLogs] = useState<string[]>(
     []
   );
-const [scoreInputs, setScoreInputs] = useState(["", "", "", ""]);
+const [scoreInputs, setScoreInputs] =
+  useState(
+    teams.map(() => ({
+      activity1: "",
+      activity2: "",
+      activity3: "",
+    }))
+  );
+const activityRewards = {
+  "1번활동": 1,
+  "2번활동": 100,
+  "3번활동": 1000,
+};
 const [isAdmin, setIsAdmin] =
   useState(false);
 const [myTeam, setMyTeam] =
   useState("");
-  const currentTeam = teams[currentTurn];
+  useEffect(() => {
+  if (teamParam) {
+    setMyTeam(teamParam);
+  }
+}, [teamParam]);
+const myIndex = teams.findIndex(
+  (team) =>
+    team.name.trim() ===
+    myTeam.trim()
+);
+
+console.log("myTeam:", myTeam);
+console.log("myIndex:", myIndex);
+
+const currentTeam =
+  teams[myIndex] || teams[0];
+  const calculateMana = (
+  index: number
+) => {
+  const activity1 =
+    Number(
+      scoreInputs[index].activity1
+    ) || 0;
+
+  const activity2 =
+    Number(
+      scoreInputs[index].activity2
+    ) || 0;
+
+  const activity3 =
+    Number(
+      scoreInputs[index].activity3
+    ) || 0;
+
+  return (
+    activity1 * 1 +
+    activity2 * 100 +
+    activity3 * 1000
+  );
+};
+  useEffect(() => {
+  const savedTeam =
+    localStorage.getItem("myTeam");
+
+  if (savedTeam) {
+    setMyTeam(savedTeam);
+  }
+}, []);
+  console.log(myTeam);
+console.log(myIndex);
+console.log(currentTeam);
 useEffect(() => {
   const loadGame = async () => {
     const gameRef = doc(
@@ -115,16 +181,12 @@ useEffect(() => {
 
       setTeams(data.teams || []);
       setLogs(data.logs || []);
-      setCurrentTurn(
-        data.currentTurn || 0
-      );
     }
   };
-
   loadGame();
 }, []);
   const currentLand =
-    board[currentTeam.position];
+  board[currentTeam.position];
 
   const getOwner = (landName: string) => {
     return teams.find((team) =>
@@ -134,14 +196,12 @@ useEffect(() => {
 const saveGame = async (
   updatedTeams: typeof teams,
   updatedLogs = logs,
-  updatedTurn = currentTurn
 ) => {
   await setDoc(
     doc(db, "games", "main"),
     {
       teams: updatedTeams,
       logs: updatedLogs,
-      currentTurn: updatedTurn,
     }
   );
 };
@@ -155,15 +215,19 @@ const saveGame = async (
       ...team,
       lands: [...team.lands],
     }));
+if (updatedTeams[myIndex].mana < 10) {
+  return;
+}
 
-    updatedTeams[currentTurn].position =
-      (updatedTeams[currentTurn].position +
+updatedTeams[myIndex].mana -= 10;
+    updatedTeams[myIndex].position =
+      (updatedTeams[myIndex].position +
         randomNumber) %
       board.length;
 
     const landedLand =
       board[
-        updatedTeams[currentTurn].position
+        updatedTeams[myIndex].position
       ];
 
     const owner = getOwner(landedLand.name);
@@ -175,7 +239,7 @@ const saveGame = async (
     );
 
     if (landedLand.name === "이벤트") {
-  updatedTeams[currentTurn].mana += 100;
+  updatedTeams[myIndex].mana += 100;
 
   newLogs.unshift(
     `${currentTeam.name} +100 마나 획득`
@@ -184,10 +248,10 @@ const saveGame = async (
 
 if (landedLand.name === "세금") {
   const tax = Math.floor(
-    updatedTeams[currentTurn].mana * 0.1
+    updatedTeams[myIndex].mana * 0.1
   );
 
-  updatedTeams[currentTurn].mana -= tax;
+  updatedTeams[myIndex].mana -= tax;
 
   newLogs.unshift(
     `${currentTeam.name} 세금 ${tax} 마나 지불`
@@ -197,7 +261,7 @@ if (landedLand.name === "행운") {
   const bonus =
     Math.floor(Math.random() * 151) + 50;
 
-  updatedTeams[currentTurn].mana +=
+  updatedTeams[myIndex].mana +=
     bonus;
 
   newLogs.unshift(
@@ -211,7 +275,7 @@ if (landedLand.name === "블랙홀") {
       Math.random() * board.length
     );
 
-  updatedTeams[currentTurn].position =
+  updatedTeams[myIndex].position =
     randomPosition;
 
   newLogs.unshift(
@@ -221,9 +285,9 @@ if (landedLand.name === "블랙홀") {
 
     if (
       owner &&
-      owner.name !== currentTeam.name
+      owner.name !== myTeam
     ) {
-      updatedTeams[currentTurn].mana -= 50;
+      updatedTeams[myIndex].mana -= 50;
 
       const ownerIndex = teams.findIndex(
         (team) => team.name === owner.name
@@ -243,17 +307,16 @@ setTeams(updatedTeams);
 await saveGame(
   updatedTeams,
   newLogs.slice(0, 20),
-  currentTurn
 );
   };
   const buyLand = async () => {
 
   const latestLand =
-    board[teams[currentTurn].position];
+    board[teams[myIndex].position];
 
   if (
     latestLand.price > 0 &&
-    currentTeam.mana >= latestLand.price &&
+    teams[myIndex].mana >= latestLand.price &&
     !getOwner(latestLand.name)
       
     ) {
@@ -262,10 +325,10 @@ await saveGame(
         lands: [...team.lands],
       }));
 
-      updatedTeams[currentTurn].mana -=
+      updatedTeams[myIndex].mana -=
   latestLand.price;
 
-      updatedTeams[currentTurn].lands.push(
+      updatedTeams[myIndex].lands.push(
         latestLand.name
       );
 
@@ -281,42 +344,66 @@ setLogs(updatedLogs);
 await saveGame(
   updatedTeams,
   updatedLogs,
-  currentTurn
 );
     }
   };
 const addScore = async (
   teamIndex: number
 ) => {
-  const score =
-    Number(scoreInputs[teamIndex]) || 0;
+  const activity1 =
+    Number(
+      scoreInputs[teamIndex]
+        .activity1
+    ) || 0;
 
-  if (score <= 0) return;
+  const activity2 =
+    Number(
+      scoreInputs[teamIndex]
+        .activity2
+    ) || 0;
+
+  const activity3 =
+    Number(
+      scoreInputs[teamIndex]
+        .activity3
+    ) || 0;
+
+  const totalScore =
+    activity1 * 1 +
+    activity2 * 100 +
+    activity3 * 1000;
 
   const updatedTeams = teams.map((team) => ({
     ...team,
     lands: [...team.lands],
   }));
 
-  updatedTeams[teamIndex].mana += score;
+  updatedTeams[teamIndex].mana +=
+    totalScore;
 
   setTeams(updatedTeams);
+
   await saveGame(updatedTeams);
 
-  const updatedInputs = [...scoreInputs];
-
-  updatedInputs[teamIndex] = "";
-
-  setScoreInputs(updatedInputs);
-
   setLogs([
-    `${updatedTeams[teamIndex].name} +${score} 마나 획득`,
+    `${updatedTeams[teamIndex].name} +${totalScore} 마나 획득`,
     ...logs,
   ]);
+  const updatedInputs = [...scoreInputs];
+
+updatedInputs[teamIndex] = {
+  activity1: "",
+  activity2: "",
+  activity3: "",
 };
+
+setScoreInputs(updatedInputs);
+};
+
+ 
 const takeoverLand = async () => {
   const latestLand =
-    board[teams[currentTurn].position];
+    board[teams[myIndex].position];
 
   const owner = getOwner(latestLand.name);
 
@@ -329,7 +416,7 @@ const takeoverLand = async () => {
 
   const cost = latestLand.price * 2;
 
-  if (currentTeam.mana < cost) {
+  if (teams[myIndex].mana < cost) {
     return;
   }
 
@@ -347,11 +434,11 @@ const takeoverLand = async () => {
       (land) => land !== latestLand.name
     );
 
-  updatedTeams[currentTurn].lands.push(
+  updatedTeams[myIndex].lands.push(
     latestLand.name
   );
 
-  updatedTeams[currentTurn].mana -= cost;
+  updatedTeams[myIndex].mana -= cost;
 
   setTeams(updatedTeams);
   await saveGame(updatedTeams);
@@ -375,33 +462,16 @@ const resetGame = async () => {
 
   setLogs([]);
 
-  setCurrentTurn(0);
-
   await setDoc(
     doc(db, "games", "main"),
     {
       teams: resetTeams,
       logs: [],
-      currentTurn: 0,
     }
   );
 };
-  const nextTurn = async () => {
-  const next =
-    (currentTurn + 1) % teams.length;
 
-  setCurrentTurn(next);
-
-  await setDoc(
-    doc(db, "games", "main"),
-    {
-      teams,
-      logs,
-      currentTurn: next,
-    }
-  );
-};
-if (!myTeam) {
+if (!myTeam && !teamParam) {
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
@@ -412,9 +482,27 @@ if (!myTeam) {
         {teams.map((team) => (
           <button
             key={team.name}
-            onClick={() =>
-              setMyTeam(team.name)
-            }
+            onClick={async () => {
+  setMyTeam(team.name);
+  localStorage.setItem(
+  "myTeam",
+  team.name
+);
+
+  const teamIndex =
+    teams.findIndex(
+      (t) => t.name === team.name
+    );
+
+
+  await setDoc(
+    doc(db, "games", "main"),
+    {
+      teams,
+      logs,
+    }
+  );
+}}
             className="bg-blue-600 p-4 rounded-xl text-xl font-bold"
           >
             {team.name}
@@ -426,7 +514,7 @@ if (!myTeam) {
 }
   return (
     <main
-  className="min-h-screen bg-cover bg-center text-white p-6"
+  className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto"
   style={{
     backgroundImage: "url('/board.png')",
   }}
@@ -449,11 +537,11 @@ if (!myTeam) {
 </button>
       <div className="bg-blue-600 p-4 rounded-2xl mb-6">
         <h2 className="text-2xl font-bold">
-          현재 턴: {currentTeam.name}
-        </h2>
+  현재 팀: {myTeam}
+</h2>
       </div>
 
-      <div className="grid grid-cols-3 gap-3 mb-6">
+      <div className="grid grid-cols-2 gap-3 mb-6">
         {board.map((tile, index) => {
           const owner = getOwner(tile.name);
 
@@ -519,12 +607,12 @@ if (!myTeam) {
           )}
           {(() => {
   const owner = getOwner(
-    board[teams[currentTurn].position].name
+    board[teams[myIndex].position].name
   );
 
   return (
     owner &&
-    owner.name !== currentTeam.name && (
+    owner.name !== myTeam && (
       <button
         onClick={takeoverLand}
         className="mt-4 ml-4 bg-red-500 px-4 py-2 rounded-xl font-bold"
@@ -537,7 +625,7 @@ if (!myTeam) {
 
       </div>
 
-      <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
+    <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
   <h2 className="text-2xl font-bold mb-4">
     🎲 주사위
   </h2>
@@ -546,32 +634,24 @@ if (!myTeam) {
     {dice}
   </div>
 
-  {currentTeam.name === myTeam && (
-    <>
-      <button
-        onClick={rollDice}
-        className="bg-blue-500 px-6 py-3 rounded-xl text-lg font-bold mr-4"
-      >
-        주사위 굴리기
-      </button>
+  <div className="flex gap-4 border-4 border-red-500 p-4">
+    <button
+      onClick={rollDice}
+      className="bg-white text-black px-6 py-3 rounded-xl text-lg font-bold"
+    >
+      주사위 굴리기
+    </button>
 
+    {isAdmin && (
       <button
-        onClick={nextTurn}
-        className="bg-purple-500 px-6 py-3 rounded-xl text-lg font-bold"
+        onClick={resetGame}
+        className="bg-red-600 px-6 py-3 rounded-xl text-lg font-bold"
       >
-        턴 종료
+        새 게임
       </button>
-    </>
-  )}
-        {isAdmin && (
-  <button
-    onClick={resetGame}
-    className="bg-red-600 px-6 py-3 rounded-xl text-lg font-bold ml-4"
-  >
-    새 게임
-  </button>
-)}
-      </div>
+    )}
+  </div>
+</div>
 
       <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
         <h2 className="text-2xl font-bold mb-4">
@@ -616,30 +696,65 @@ if (!myTeam) {
       </p>
 
       {isAdmin && (
-        <div className="flex gap-2">
-          <input
-            type="number"
-            value={scoreInputs[index]}
-            onChange={(e) => {
-              const updated = [...scoreInputs];
+  <div className="flex flex-col gap-2">
+    <input
+      type="number"
+      placeholder="1번 활동"
+      value={scoreInputs[index].activity1}
+      onChange={(e) => {
+        const updated = [...scoreInputs];
 
-              updated[index] =
-                e.target.value;
+        updated[index].activity1 =
+          e.target.value;
 
-              setScoreInputs(updated);
-            }}
-            placeholder="점수 입력"
-            className="bg-zinc-700 px-3 py-2 rounded-lg w-full"
-          />
+        setScoreInputs(updated);
+      }}
+      className="bg-zinc-700 px-3 py-2 rounded-lg"
+    />
 
-          <button
-            onClick={() => addScore(index)}
-            className="bg-green-500 px-4 rounded-lg font-bold"
-          >
-            추가
-          </button>
-        </div>
-      )}
+    <input
+      type="number"
+      placeholder="2번 활동"
+      value={scoreInputs[index].activity2}
+      onChange={(e) => {
+        const updated = [...scoreInputs];
+
+        updated[index].activity2 =
+          e.target.value;
+
+        setScoreInputs(updated);
+      }}
+      className="bg-zinc-700 px-3 py-2 rounded-lg"
+    />
+
+    <input
+      type="number"
+      placeholder="3번 활동"
+      value={scoreInputs[index].activity3}
+      onChange={(e) => {
+        const updated = [...scoreInputs];
+
+        updated[index].activity3 =
+          e.target.value;
+
+        setScoreInputs(updated);
+      }}
+      className="bg-zinc-700 px-3 py-2 rounded-lg"
+    />
+
+    <p className="text-lg font-bold">
+      예상 마나:
+      {calculateMana(index)}
+    </p>
+
+    <button
+      onClick={() => addScore(index)}
+      className="bg-green-500 px-4 py-2 rounded-lg font-bold"
+    >
+      마나 지급
+    </button>
+  </div>
+)}
     </div>
   ))}
 </div>
