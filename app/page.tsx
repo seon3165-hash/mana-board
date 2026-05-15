@@ -93,7 +93,10 @@ export default function Home() {
     []
   );
 const [scoreInputs, setScoreInputs] = useState(["", "", "", ""]);
-const isAdmin = false;
+const [isAdmin, setIsAdmin] =
+  useState(false);
+const [myTeam, setMyTeam] =
+  useState("");
   const currentTeam = teams[currentTurn];
 useEffect(() => {
   const loadGame = async () => {
@@ -398,13 +401,52 @@ const resetGame = async () => {
     }
   );
 };
-
+if (!myTeam) {
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
-        Mana Marble
+        팀 선택
       </h1>
 
+      <div className="flex flex-col gap-4">
+        {teams.map((team) => (
+          <button
+            key={team.name}
+            onClick={() =>
+              setMyTeam(team.name)
+            }
+            className="bg-blue-600 p-4 rounded-xl text-xl font-bold"
+          >
+            {team.name}
+          </button>
+        ))}
+      </div>
+    </main>
+  );
+}
+  return (
+    <main
+  className="min-h-screen bg-cover bg-center text-white p-6"
+  style={{
+    backgroundImage: "url('/board.png')",
+  }}
+>
+      <h1 className="text-4xl font-bold mb-6">
+        Mana Marble
+      </h1>
+<button
+  onClick={() => {
+    const password =
+      prompt("관리자 비밀번호");
+
+    if (password === "1234") {
+      setIsAdmin(true);
+    }
+  }}
+  className="bg-red-500 px-4 py-2 rounded-xl mb-4"
+>
+  관리자 로그인
+</button>
       <div className="bg-blue-600 p-4 rounded-2xl mb-6">
         <h2 className="text-2xl font-bold">
           현재 턴: {currentTeam.name}
