@@ -547,8 +547,6 @@ if (!myTeam) {
     const positions = [
   // 아래
   { top: "85%", left: "0%" },
-
-  { top: "85%", left: "5%" },
   { top: "85%", left: "15%" },
   { top: "85%", left: "25%" },
   { top: "85%", left: "35%" },
@@ -582,11 +580,13 @@ if (!myTeam) {
   { top: "46%", left: "5%" },
   { top: "59%", left: "5%" },
   { top: "72%", left: "5%" },
+  { top: "85%", left: "5%" },
 ];
 
     const position =
   positions[
-    index % positions.length
+    (index + 1) %
+      positions.length
   ];
 
     return (
