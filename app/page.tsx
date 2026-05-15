@@ -547,14 +547,14 @@ if (!myTeam) {
     const positions = [
   // 아래
   { top: "85%", left: "0%" },
-  { top: "85%", left: "15%" },
-  { top: "85%", left: "25%" },
-  { top: "85%", left: "35%" },
-  { top: "85%", left: "45%" },
-  { top: "85%", left: "55%" },
-  { top: "85%", left: "65%" },
-  { top: "85%", left: "75%" },
-  { top: "85%", left: "85%" },
+  { top: "85%", left: "12%" },
+  { top: "85%", left: "24%" },
+  { top: "85%", left: "36%" },
+  { top: "85%", left: "48%" },
+  { top: "85%", left: "60%" },
+  { top: "85%", left: "72%" },
+  { top: "85%", left: "84%" },
+  { top: "85%", left: "96%" },
 
   // 오른쪽
   { top: "72%", left: "85%" },
@@ -581,6 +581,7 @@ if (!myTeam) {
   { top: "59%", left: "5%" },
   { top: "72%", left: "5%" },
   { top: "85%", left: "5%" },
+  { top: "85%", left: "95%" },
 ];
 
     const position =
