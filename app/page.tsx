@@ -546,24 +546,32 @@ if (!myTeam) {
     const owner = getOwner(tile.name);
 
     const positions = [
-      { top: "80%", left: "5%" },
-      { top: "80%", left: "20%" },
-      { top: "80%", left: "35%" },
-      { top: "80%", left: "50%" },
-      { top: "80%", left: "65%" },
-      { top: "80%", left: "80%" },
+  { top: "85%", left: "5%" },
+  { top: "85%", left: "18%" },
+  { top: "85%", left: "31%" },
+  { top: "85%", left: "44%" },
+  { top: "85%", left: "57%" },
+  { top: "85%", left: "70%" },
+  { top: "85%", left: "83%" },
 
-      { top: "60%", left: "80%" },
-      { top: "40%", left: "80%" },
-      { top: "20%", left: "80%" },
+  { top: "70%", left: "83%" },
+  { top: "55%", left: "83%" },
+  { top: "40%", left: "83%" },
+  { top: "25%", left: "83%" },
+  { top: "10%", left: "83%" },
 
-      { top: "20%", left: "60%" },
-      { top: "20%", left: "40%" },
-      { top: "20%", left: "20%" },
+  { top: "10%", left: "70%" },
+  { top: "10%", left: "57%" },
+  { top: "10%", left: "44%" },
+  { top: "10%", left: "31%" },
+  { top: "10%", left: "18%" },
+  { top: "10%", left: "5%" },
 
-      { top: "40%", left: "5%" },
-      { top: "60%", left: "5%" },
-    ];
+  { top: "25%", left: "5%" },
+  { top: "40%", left: "5%" },
+  { top: "55%", left: "5%" },
+  { top: "70%", left: "5%" },
+];
 
     const position =
       positions[index % positions.length];
