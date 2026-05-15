@@ -14,8 +14,8 @@ export default function Home() {
   { name: "시작", price: 0 },
 
   { name: "서울", price: 100 },
-  { name: "도쿄", price: 120 },
-
+  { name: "일본", price: 120 },
+  { name: "대만", price: 140 },
   { name: "이벤트", price: 0 },
 
   { name: "방콕", price: 160 },
@@ -575,7 +575,6 @@ if (!myTeam) {
   { top: "7%", left: "5%" },
 
   // 왼쪽
-  { top: "7%", left: "5%" },
   { top: "20%", left: "5%" },
   { top: "33%", left: "5%" },
   { top: "46%", left: "5%" },
