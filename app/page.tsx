@@ -550,40 +550,36 @@ if (
     const positions = [
 
   // 시작
-  { top: "85%", left: "5%" },
+  { top: "88%", left: "-2%" },
 
   // 아래
-  { top: "85%", left: "25%" },
-  { top: "85%", left: "35%" },
-  { top: "85%", left: "45%" },
-  { top: "85%", left: "55%" },
-  { top: "85%", left: "65%" },
-  { top: "85%", left: "75%" },
-  { top: "85%", left: "85%" },
+  { top: "88%", left: "12%" },
+  { top: "88%", left: "26%" },
+  { top: "88%", left: "40%" },
+  { top: "88%", left: "54%" },
+  { top: "88%", left: "68%" },
+  { top: "88%", left: "82%" },
 
   // 오른쪽
-  { top: "72%", left: "85%" },
-  { top: "59%", left: "85%" },
-  { top: "46%", left: "85%" },
-  { top: "33%", left: "85%" },
-  { top: "20%", left: "85%" },
-  { top: "7%", left: "85%" },
+  { top: "72%", left: "82%" },
+  { top: "56%", left: "82%" },
+  { top: "40%", left: "82%" },
+  { top: "24%", left: "82%" },
+  { top: "8%", left: "82%" },
 
   // 위
-  { top: "7%", left: "65%" },
-  { top: "7%", left: "55%" },
-  { top: "7%", left: "45%" },
-  { top: "7%", left: "35%" },
-  { top: "7%", left: "25%" },
-  { top: "7%", left: "15%" },
-  { top: "7%", left: "5%" },
+  { top: "8%", left: "68%" },
+  { top: "8%", left: "54%" },
+  { top: "8%", left: "40%" },
+  { top: "8%", left: "26%" },
+  { top: "8%", left: "12%" },
+  { top: "8%", left: "-2%" },
 
   // 왼쪽
-  { top: "20%", left: "5%" },
-  { top: "33%", left: "5%" },
-  { top: "46%", left: "5%" },
-  { top: "59%", left: "5%" },
-  { top: "72%", left: "5%" },
+  { top: "24%", left: "-2%" },
+  { top: "40%", left: "-2%" },
+  { top: "56%", left: "-2%" },
+  { top: "72%", left: "-2%" },
 ];
 
     const position =
