@@ -575,6 +575,7 @@ if (!myTeam) {
   { top: "7%", left: "5%" },
 
   // 왼쪽
+  { top: "7%", left: "5%" },
   { top: "20%", left: "5%" },
   { top: "33%", left: "5%" },
   { top: "46%", left: "5%" },
