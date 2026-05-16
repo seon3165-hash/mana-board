@@ -40,8 +40,6 @@ export default function Home() {
   { name: "멕시코시티", price: 380 },
 
   { name: "축제", price: 0 },
-
-  { name: "리우데자네이루", price: 400 },
   { name: "시드니", price: 420 },
   { name: "케이프타운", price: 440 },
 
@@ -181,7 +179,8 @@ useEffect(() => {
   loadGame();
 }, []);
   const currentLand =
-  board[currentTeam.position];
+  board[currentTeam.position] ||
+  board[0];
 
   const getOwner = (landName: string) => {
     return teams.find((team) =>
@@ -554,10 +553,8 @@ if (
 
   const positions = [
 
-  // 시작
+   // 아래 (7칸)
   { top: "85%", left: "5%" },
-
-  // 아래 (6칸)
   { top: "85%", left: "18%" },
   { top: "85%", left: "31%" },
   { top: "85%", left: "44%" },
@@ -574,7 +571,6 @@ if (
   { top: "7%", left: "83%" },
 
   // 위 (6칸)
-  { top: "7%", left: "83%" },
   { top: "7%", left: "70%" },
   { top: "7%", left: "57%" },
   { top: "7%", left: "44%" },
@@ -582,13 +578,12 @@ if (
   { top: "7%", left: "18%" },
   { top: "7%", left: "5%" },
 
-  // 왼쪽 (6칸)
+  // 왼쪽 (5칸)
   { top: "20%", left: "5%" },
   { top: "33%", left: "5%" },
   { top: "46%", left: "5%" },
   { top: "59%", left: "5%" },
   { top: "72%", left: "5%" },
-  { top: "85%", left: "5%" },
 ];
 
     const position =
