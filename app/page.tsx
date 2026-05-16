@@ -612,7 +612,7 @@ if (
           owner
   ? owner.color
   : isSpecial
-    ? "bg-purple-600 border-pink-300"
+    ? "bg-pink-300 border-pink-100 text-black"
     : "bg-zinc-800"
         }`}
         style={{
