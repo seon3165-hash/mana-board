@@ -40,11 +40,9 @@ export default function Home() {
   { name: "멕시코시티", price: 380 },
 
   { name: "축제", price: 0 },
-  { name: "시드니", price: 420 },
-  { name: "케이프타운", price: 440 },
-
-  { name: "홍콩", price: 460 },
-  { name: "로스앤젤레스", price: 480 },
+  { name: "시드니", price: 400 },
+  { name: "케이프타운", price: 420 },
+  { name: "로스앤젤레스", price: 460 },
   { name: "상하이", price: 500 },
 ];
 
