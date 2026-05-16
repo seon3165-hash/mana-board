@@ -101,6 +101,8 @@ const [myTeam, setMyTeam] =
   useState("");
   const [playerName, setPlayerName] =
   useState("");
+  const [loaded, setLoaded] =
+  useState(false);
   useEffect(() => {
   const params =
     new URLSearchParams(
@@ -166,7 +168,10 @@ useEffect(() => {
   if (savedName) {
     setPlayerName(savedName);
   }
+
+  setLoaded(true);
 }, []);
+
 useEffect(() => {
   const loadGame = async () => {
     const gameRef = doc(
@@ -496,6 +501,43 @@ if (
     "team="
   )
 ) {
+  if (!loaded) {
+  return null;
+}
+
+if (!playerName) {
+  return (
+    <main className="min-h-screen bg-zinc-900 text-white p-6">
+
+      <h1 className="text-3xl font-bold mb-6">
+        이름 입력
+      </h1>
+
+      <input
+        value={playerName}
+        onChange={(e) =>
+          setPlayerName(e.target.value)
+        }
+        placeholder="이름 입력"
+        className="bg-zinc-800 p-3 rounded-xl w-full"
+      />
+
+      <button
+        onClick={() => {
+          localStorage.setItem(
+            "playerName",
+            playerName
+          );
+          location.reload();
+        }}
+        className="bg-blue-500 p-3 rounded-xl mt-4"
+      >
+        시작
+      </button>
+
+    </main>
+  );
+}
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
@@ -536,39 +578,7 @@ if (
     </main>
   );
 }
-if (!playerName) {
-  return (
-    <main className="min-h-screen bg-zinc-900 text-white p-6">
 
-      <h1 className="text-3xl font-bold mb-6">
-        이름 입력
-      </h1>
-
-      <input
-        value={playerName}
-        onChange={(e) =>
-          setPlayerName(e.target.value)
-        }
-        placeholder="이름 입력"
-        className="bg-zinc-800 p-3 rounded-xl w-full"
-      />
-
-      <button
-        onClick={() => {
-          localStorage.setItem(
-            "playerName",
-            playerName
-          );
-          location.reload();
-        }}
-        className="bg-blue-500 p-3 rounded-xl mt-4"
-      >
-        시작
-      </button>
-
-    </main>
-  );
-}
   return (
     <main
   className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto"
