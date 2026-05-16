@@ -551,43 +551,43 @@ if (
   {board.map((tile, index) => {
     const owner = getOwner(tile.name);
 
-    const positions = [
+
+  const positions = [
 
   // 시작
-  { top: "88%", left: "-2%" },
+  { top: "85%", left: "5%" },
 
-  // 아래
-  { top: "88%", left: "12%" },
-  { top: "88%", left: "26%" },
-  { top: "88%", left: "40%" },
-  { top: "88%", left: "54%" },
-  { top: "88%", left: "68%" },
-  { top: "88%", left: "82%" },
-  { top: "88%", left: "5%" },
-{ top: "88%", left: "15%" },
-{ top: "88%", left: "25%" },
+  // 아래 (6칸)
+  { top: "85%", left: "18%" },
+  { top: "85%", left: "31%" },
+  { top: "85%", left: "44%" },
+  { top: "85%", left: "57%" },
+  { top: "85%", left: "70%" },
+  { top: "85%", left: "83%" },
 
-  // 오른쪽
-  { top: "72%", left: "82%" },
-  { top: "56%", left: "82%" },
-  { top: "40%", left: "82%" },
-  { top: "24%", left: "82%" },
-  { top: "8%", left: "82%" },
+  // 오른쪽 (6칸)
+  { top: "72%", left: "83%" },
+  { top: "59%", left: "83%" },
+  { top: "46%", left: "83%" },
+  { top: "33%", left: "83%" },
+  { top: "20%", left: "83%" },
+  { top: "7%", left: "83%" },
 
-  // 위
-  { top: "8%", left: "68%" },
-  { top: "8%", left: "54%" },
-  { top: "8%", left: "40%" },
-  { top: "8%", left: "26%" },
-  { top: "8%", left: "12%" },
-  { top: "8%", left: "-2%" },
+  // 위 (6칸)
+  { top: "7%", left: "70%" },
+  { top: "7%", left: "57%" },
+  { top: "7%", left: "44%" },
+  { top: "7%", left: "31%" },
+  { top: "7%", left: "18%" },
+  { top: "7%", left: "5%" },
 
-  // 왼쪽
-  { top: "24%", left: "-2%" },
-  { top: "40%", left: "-2%" },
-  { top: "56%", left: "-2%" },
-  { top: "72%", left: "-2%" },
-  { top: "85%", left: "-2%" },
+  // 왼쪽 (6칸)
+  { top: "20%", left: "5%" },
+  { top: "33%", left: "5%" },
+  { top: "46%", left: "5%" },
+  { top: "59%", left: "5%" },
+  { top: "72%", left: "5%" },
+  { top: "85%", left: "5%" },
 ];
 
     const position =
