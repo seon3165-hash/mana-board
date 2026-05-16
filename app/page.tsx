@@ -201,6 +201,9 @@ const saveGame = async (
   );
 };
   const rollDice = async () => {
+
+    if (myIndex === -1) return;
+
     const randomNumber =
       Math.floor(Math.random() * 6) + 1;
 
@@ -306,12 +309,14 @@ await saveGame(
   };
   const buyLand = async () => {
 
+    if (myIndex === -1) return;
+
   const latestLand =
-    board[teams[myIndex].position];
+    board[currentTeam.position];
 
   if (
     latestLand.price > 0 &&
-    teams[myIndex].mana >= latestLand.price &&
+    currentTeam.mana >= latestLand.price &&
     !getOwner(latestLand.name)
       
     ) {
@@ -398,7 +403,7 @@ setScoreInputs(updatedInputs);
  
 const takeoverLand = async () => {
   const latestLand =
-    board[teams[myIndex].position];
+    board[currentTeam.position];
 
   const owner = getOwner(latestLand.name);
 
@@ -411,7 +416,7 @@ const takeoverLand = async () => {
 
   const cost = latestLand.price * 2;
 
-  if (teams[myIndex].mana < cost) {
+  if (currentTeam.mana < cost) {
     return;
   }
 
@@ -558,6 +563,9 @@ if (
   { top: "88%", left: "54%" },
   { top: "88%", left: "68%" },
   { top: "88%", left: "82%" },
+  { top: "88%", left: "5%" },
+{ top: "88%", left: "15%" },
+{ top: "88%", left: "25%" },
 
   // 오른쪽
   { top: "72%", left: "82%" },
@@ -652,7 +660,7 @@ if (
           )}
           {(() => {
   const owner = getOwner(
-    board[teams[myIndex].position].name
+    board[currentTeam.position].name
   );
 
   return (
