@@ -282,17 +282,26 @@ if (landedLand.name === "블랙홀") {
       owner &&
       owner.name !== myTeam
     ) {
-      updatedTeams[myIndex].mana -= 50;
+      const toll = Math.floor(
+  landedLand.price * 0.1
+);
 
-      const ownerIndex = teams.findIndex(
-        (team) => team.name === owner.name
-      );
+updatedTeams[myIndex].mana -=
+  toll;
 
-      updatedTeams[ownerIndex].mana += 50;
+const ownerIndex = teams.findIndex(
+  (team) => team.name === owner.name
+);
+
+updatedTeams[ownerIndex].mana +=
+  toll;
 
       newLogs.unshift(
-        `${currentTeam.name} 통행료 50 지불`
+        `${currentTeam.name} 통행료 ${toll} 지불`
       );
+      newLogs.unshift(
+  `${owner.name} +${toll} 마나 획득`
+);
     }
 
     setLogs(newLogs.slice(0, 20));
@@ -546,6 +555,14 @@ if (
       <div className="relative w-full h-[900px] bg-zinc-900 rounded-3xl mb-6">
 
   {board.map((tile, index) => {
+
+  const isSpecial = [
+    "이벤트",
+    "세금",
+    "행운",
+    "무인도",
+    "축제",
+  ].includes(tile.name);
     const owner = getOwner(tile.name);
 
 
@@ -593,8 +610,10 @@ if (
         key={index}
         className={`absolute w-28 h-28 rounded-2xl p-2 text-center border-4 ${
           owner
-            ? owner.color
-            : "bg-zinc-800"
+  ? owner.color
+  : isSpecial
+    ? "bg-yellow-500"
+    : "bg-zinc-800"
         }`}
         style={{
           top: position.top,
@@ -671,6 +690,78 @@ if (
 })()}
 
       </div>
+      <div className="bg-zinc-800 p-4 rounded-2xl mb-6">
+  <h2 className="text-2xl font-bold mb-4">
+    순위
+  </h2>
+
+  {[...teams]
+    .sort((a, b) => {
+      const aTotal =
+        a.mana +
+        a.lands.reduce(
+          (sum, land) =>
+            sum +
+            (board.find(
+              (b) => b.name === land
+            )?.price || 0),
+          0
+        );
+
+      const bTotal =
+        b.mana +
+        b.lands.reduce(
+          (sum, land) =>
+            sum +
+            (board.find(
+              (b2) => b2.name === land
+            )?.price || 0),
+          0
+        );
+
+      return bTotal - aTotal;
+    })
+    .map((team, index) => {
+
+      const totalScore =
+        team.mana +
+        team.lands.reduce(
+          (sum, land) =>
+            sum +
+            (board.find(
+              (b) => b.name === land
+            )?.price || 0),
+          0
+        );
+
+      return (
+        <div
+          key={team.name}
+          className="flex justify-between items-center mb-2 bg-zinc-700 p-3 rounded-xl"
+        >
+          <div>
+            <span className="font-bold">
+              {index + 1}등
+            </span>
+
+            <span className="ml-3">
+              {team.name}
+            </span>
+          </div>
+
+          <div className="text-right">
+            <div>
+              {totalScore} 점
+            </div>
+
+            <div className="text-sm text-zinc-300">
+              마나 {team.mana}
+            </div>
+          </div>
+        </div>
+      );
+    })}
+</div>
 
     <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
   <h2 className="text-2xl font-bold mb-4">
