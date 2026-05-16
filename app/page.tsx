@@ -99,6 +99,8 @@ const [isAdmin, setIsAdmin] =
   useState(false);
 const [myTeam, setMyTeam] =
   useState("");
+  const [playerName, setPlayerName] =
+  useState("");
   useEffect(() => {
   const params =
     new URLSearchParams(
@@ -153,6 +155,16 @@ const currentTeam =
 
   if (savedTeam) {
     setMyTeam(savedTeam);
+  }
+}, []);
+useEffect(() => {
+  const savedName =
+    localStorage.getItem(
+      "playerName"
+    );
+
+  if (savedName) {
+    setPlayerName(savedName);
   }
 }, []);
 useEffect(() => {
@@ -524,6 +536,39 @@ if (
     </main>
   );
 }
+if (!playerName) {
+  return (
+    <main className="min-h-screen bg-zinc-900 text-white p-6">
+
+      <h1 className="text-3xl font-bold mb-6">
+        이름 입력
+      </h1>
+
+      <input
+        value={playerName}
+        onChange={(e) =>
+          setPlayerName(e.target.value)
+        }
+        placeholder="이름 입력"
+        className="bg-zinc-800 p-3 rounded-xl w-full"
+      />
+
+      <button
+        onClick={() => {
+          localStorage.setItem(
+            "playerName",
+            playerName
+          );
+          location.reload();
+        }}
+        className="bg-blue-500 p-3 rounded-xl mt-4"
+      >
+        시작
+      </button>
+
+    </main>
+  );
+}
   return (
     <main
   className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto"
@@ -827,16 +872,17 @@ if (
       </p>
 
       <p className="mb-3">
-        보유 땅:
-        {team.lands.length > 0
-          ? team.lands.join(", ")
-          : " 없음"}
-      </p>
+  보유 땅:
+  {team.lands.length > 0
+    ? team.lands.join(", ")
+    : " 없음"}
+</p>
 
-      
-  <div className="flex flex-col gap-2">
-    <input
-      type="number"
+{team.name === myTeam && (
+
+<div className="flex flex-col gap-2">
+  <input
+    type="number"
       placeholder="단순"
       value={scoreInputs[index].activity1}
       onChange={(e) => {
@@ -890,11 +936,14 @@ if (
       className="bg-green-500 px-4 py-2 rounded-lg font-bold"
     >
       마나 지급
-    </button>
-  </div>
+</button>
+</div>
+
+)}
     </div>
   ))}
 </div>
+  
 
     </main>
   );
