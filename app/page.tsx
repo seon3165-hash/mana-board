@@ -755,7 +755,7 @@ if (!myTeam) {
           owner
   ? owner.color
   : isSpecial
-    ? "bg-pink-300 border-pink-100 text-black"
+    ? "bg-amber-400 border-yellow-100 text-black"
     : "bg-zinc-800"
         }`}
         style={{
