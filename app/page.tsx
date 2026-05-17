@@ -709,40 +709,79 @@ if (!myTeam) {
     const owner = getOwner(tile.name);
 
 
-  const positions = [
+  const isMobile =
+  typeof window !== "undefined" &&
+  window.innerWidth < 768;
 
-   // 아래 (7칸)
-{ top: "85%", left: "2%" },
-{ top: "85%", left: "16%" },
-{ top: "85%", left: "30%" },
-{ top: "85%", left: "44%" },
-{ top: "85%", left: "58%" },
-{ top: "85%", left: "72%" },
-{ top: "85%", left: "85%" },
+const positions = isMobile
+  ? [
 
-  // 오른쪽 (6칸)
-  { top: "72%", left: "85%" },
-  { top: "59%", left: "85%" },
-  { top: "46%", left: "85%" },
-  { top: "33%", left: "85%" },
-  { top: "20%", left: "85%" },
-  { top: "7%", left: "85%" },
+      // 📱 모바일 아래 (7칸)
+      { top: "85%", left: "2%" },
+      { top: "85%", left: "19%" },
+      { top: "85%", left: "36%" },
+      { top: "85%", left: "53%" },
+      { top: "85%", left: "70%" },
+      { top: "85%", left: "86%" },
 
-  // 위 (6칸)
-{ top: "7%", left: "72%" },
-{ top: "7%", left: "58%" },
-{ top: "7%", left: "44%" },
-{ top: "7%", left: "30%" },
-{ top: "7%", left: "16%" },
-{ top: "7%", left: "2%" },
+      // 📱 모바일 오른쪽 (6칸)
+      { top: "74%", left: "87%" },
+      { top: "63%", left: "87%" },
+      { top: "52%", left: "87%" },
+      { top: "41%", left: "87%" },
+      { top: "30%", left: "87%" },
+      { top: "19%", left: "87%" },
+      { top: "8%", left: "87%" },
 
-  // 왼쪽 (5칸)
-  { top: "20%", left: "2%" },
-  { top: "33%", left: "2%" },
-  { top: "46%", left: "2%" },
-  { top: "59%", left: "2%" },
-  { top: "72%", left: "2%" },
-];
+      // 📱 모바일 위 (6칸)
+      { top: "8%", left: "70%" },
+      { top: "8%", left: "53%" },
+      { top: "8%", left: "36%" },
+      { top: "8%", left: "19%" },
+      { top: "8%", left: "2%" },
+
+      // 📱 모바일 왼쪽 (5칸)
+      { top: "19%", left: "2%" },
+      { top: "30%", left: "2%" },
+      { top: "41%", left: "2%" },
+      { top: "52%", left: "2%" },
+      { top: "63%", left: "2%" },
+      { top: "74%", left: "2%" },
+
+    ]
+  : [
+
+      // 💻 PC 기존 유지
+      { top: "85%", left: "2%" },
+      { top: "85%", left: "14%" },
+      { top: "85%", left: "26%" },
+      { top: "85%", left: "38%" },
+      { top: "85%", left: "50%" },
+      { top: "85%", left: "62%" },
+      { top: "85%", left: "74%" },
+      { top: "85%", left: "86%" },
+      
+
+      { top: "70%", left: "86%" },
+      { top: "55%", left: "86%" },
+      { top: "40%", left: "86%" },
+      { top: "25%", left: "86%" },
+      { top: "10%", left: "86%" },
+
+      { top: "10%", left: "74%" },
+      { top: "10%", left: "62%" },
+      { top: "10%", left: "50%" },
+      { top: "10%", left: "38%" },
+      { top: "10%", left: "26%" },
+      { top: "10%", left: "14%" },
+      { top: "10%", left: "2%" },
+
+      { top: "25%", left: "2%" },
+      { top: "40%", left: "2%" },
+      { top: "55%", left: "2%" },
+      { top: "70%", left: "2%" },
+
+    ];
 
     const position =
   positions[index] ||
@@ -751,7 +790,7 @@ if (!myTeam) {
     return (
       <div
         key={index}
-        className={`absolute w-16 h-16 md:w-28 md:h-28 rounded-2xl p-1 md:p-2 text-center border-4 ${
+        className={`absolute w-16 h-16 md:w-32 md:h-32 rounded-2xl p-1 md:p-2 text-center border-4 ${
           owner
   ? owner.color
   : isSpecial
@@ -763,11 +802,11 @@ if (!myTeam) {
           left: position.left,
         }}
       >
-        <div className="font-bold text-[5px] md:text-sm">
+        <div className="font-bold text-[7px] md:text-base">
           {tile.name}
         </div>
 
-        <div className="text-[8px] md:text-xs">
+        <div className="text-[7px] md:text-sm">
           {tile.price > 0
             ? `${tile.price}`
             : "특수"}
