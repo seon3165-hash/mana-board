@@ -679,7 +679,7 @@ if (!myTeam) {
 
 </div>
 
-      <div className="relative w-full h-[900px] bg-zinc-900 rounded-3xl mb-6">
+      <div className="relative w-full h-[650px] md:h-[900px] bg-zinc-900 rounded-3xl mb-6 overflow-hidden">
         <div
   className="
   absolute
@@ -712,36 +712,36 @@ if (!myTeam) {
   const positions = [
 
    // 아래 (7칸)
-  { top: "85%", left: "5%" },
-  { top: "85%", left: "18%" },
-  { top: "85%", left: "31%" },
-  { top: "85%", left: "44%" },
-  { top: "85%", left: "57%" },
-  { top: "85%", left: "70%" },
-  { top: "85%", left: "83%" },
+{ top: "85%", left: "2%" },
+{ top: "85%", left: "16%" },
+{ top: "85%", left: "30%" },
+{ top: "85%", left: "44%" },
+{ top: "85%", left: "58%" },
+{ top: "85%", left: "72%" },
+{ top: "85%", left: "85%" },
 
   // 오른쪽 (6칸)
-  { top: "72%", left: "83%" },
-  { top: "59%", left: "83%" },
-  { top: "46%", left: "83%" },
-  { top: "33%", left: "83%" },
-  { top: "20%", left: "83%" },
-  { top: "7%", left: "83%" },
+  { top: "72%", left: "85%" },
+  { top: "59%", left: "85%" },
+  { top: "46%", left: "85%" },
+  { top: "33%", left: "85%" },
+  { top: "20%", left: "85%" },
+  { top: "7%", left: "85%" },
 
   // 위 (6칸)
-  { top: "7%", left: "70%" },
-  { top: "7%", left: "57%" },
-  { top: "7%", left: "44%" },
-  { top: "7%", left: "31%" },
-  { top: "7%", left: "18%" },
-  { top: "7%", left: "5%" },
+{ top: "7%", left: "72%" },
+{ top: "7%", left: "58%" },
+{ top: "7%", left: "44%" },
+{ top: "7%", left: "30%" },
+{ top: "7%", left: "16%" },
+{ top: "7%", left: "2%" },
 
   // 왼쪽 (5칸)
-  { top: "20%", left: "5%" },
-  { top: "33%", left: "5%" },
-  { top: "46%", left: "5%" },
-  { top: "59%", left: "5%" },
-  { top: "72%", left: "5%" },
+  { top: "20%", left: "2%" },
+  { top: "33%", left: "2%" },
+  { top: "46%", left: "2%" },
+  { top: "59%", left: "2%" },
+  { top: "72%", left: "2%" },
 ];
 
     const position =
@@ -763,7 +763,7 @@ if (!myTeam) {
           left: position.left,
         }}
       >
-        <div className="font-bold text-[10px] md:text-sm">
+        <div className="font-bold text-[5px] md:text-sm">
           {tile.name}
         </div>
 
@@ -774,7 +774,7 @@ if (!myTeam) {
         </div>
 
         {owner && (
-          <div className="text-xs mt-1">
+          <div className="text-[5px] md:text-xs mt-1">
             🏠 {owner.name}
           </div>
         )}
