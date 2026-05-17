@@ -33,7 +33,7 @@ export default function Home() {
   { name: "런던", price: 300 },
   { name: "로마", price: 320 },
 
-  { name: "무인도", price: 0 },
+  { name: "랜덤", price: 0 },
 
   { name: "뉴욕", price: 340 },
   { name: "토론토", price: 360 },
@@ -88,10 +88,12 @@ const [scoreInputs, setScoreInputs] =
       activity1: "",
       activity2: "",
       activity3: "",
+      activity4: "",
     }))
   );
 const activityRewards = {
   "단순": 1,
+  "대학생": 1,
   "유효": 100,
   "침례": 1000,
 };
@@ -101,20 +103,35 @@ const [myTeam, setMyTeam] =
   useState("");
   const [playerName, setPlayerName] =
   useState("");
+  const [savedPlayerName, setSavedPlayerName] =
+  useState("");
+
+  
+
   const [loaded, setLoaded] =
   useState(false);
   useEffect(() => {
-  const params =
-    new URLSearchParams(
-      window.location.search
+  const savedTeam =
+    localStorage.getItem(
+      "myTeam"
     );
 
-  const team =
-    params.get("team");
+  const savedName =
+    localStorage.getItem(
+      "playerName"
+    );
 
-  if (team) {
-    setMyTeam(team);
+  if (savedTeam) {
+    setMyTeam(savedTeam);
   }
+
+  if (savedName) {
+    setSavedPlayerName(
+      savedName
+    );
+  }
+
+  setLoaded(true);
 }, []);
 const myIndex = teams.findIndex(
   (team) =>
@@ -145,32 +162,18 @@ const currentTeam =
       scoreInputs[index].activity3
     ) || 0;
 
+  const activity4 =
+    Number(
+      scoreInputs[index].activity4
+    ) || 0;
+
   return (
     activity1 * 1 +
-    activity2 * 100 +
-    activity3 * 1000
+    activity2 * 10 +
+    activity3 * 100 +
+    activity4 * 1000 
   );
 };
-  useEffect(() => {
-  const savedTeam =
-    localStorage.getItem("myTeam");
-
-  if (savedTeam) {
-    setMyTeam(savedTeam);
-  }
-}, []);
-useEffect(() => {
-  const savedName =
-    localStorage.getItem(
-      "playerName"
-    );
-
-  if (savedName) {
-    setPlayerName(savedName);
-  }
-
-  setLoaded(true);
-}, []);
 
 useEffect(() => {
   const loadGame = async () => {
@@ -247,7 +250,7 @@ updatedTeams[myIndex].mana -= 10;
     const newLogs = [...logs];
 
     newLogs.unshift(
-      `${currentTeam.name}이(가) ${landedLand.name} 도착`
+      `${currentTeam.name}_${savedPlayerName}_${landedLand.name}_도착`
     );
 
     if (landedLand.name === "이벤트") {
@@ -266,8 +269,8 @@ if (landedLand.name === "세금") {
   updatedTeams[myIndex].mana -= tax;
 
   newLogs.unshift(
-    `${currentTeam.name} 세금 ${tax} 마나 지불`
-  );
+  `${currentTeam.name}_${savedPlayerName}_${tax}마나_세금지불`
+);
 }
 if (landedLand.name === "행운") {
   const bonus =
@@ -280,19 +283,46 @@ if (landedLand.name === "행운") {
     `${currentTeam.name} 행운! +${bonus} 마나`
   );
 }
+if (landedLand.name === "랜덤") {
 
-if (landedLand.name === "블랙홀") {
-  const randomPosition =
+  const randomEvent =
     Math.floor(
-      Math.random() * board.length
+      Math.random() * 4
     );
 
-  updatedTeams[myIndex].position =
-    randomPosition;
+  if (randomEvent === 0) {
+    updatedTeams[myIndex].mana += 200;
 
-  newLogs.unshift(
-    `${currentTeam.name} 블랙홀 이동!`
-  );
+    newLogs.unshift(
+`${currentTeam.name}_${savedPlayerName}_200마나_획득`
+    );
+  }
+
+  if (randomEvent === 1) {
+    updatedTeams[myIndex].mana -= 100;
+
+    newLogs.unshift(
+`${currentTeam.name}_${savedPlayerName}_100마나_차감`
+    );
+  }
+
+  if (randomEvent === 2) {
+    updatedTeams[myIndex].position =
+      Math.floor(
+        Math.random() *
+        board.length
+      );
+
+    newLogs.unshift(
+`${currentTeam.name}_${savedPlayerName}_랜덤이동`
+    );
+  }
+
+  if (randomEvent === 3) {
+    newLogs.unshift(
+`${currentTeam.name}_${savedPlayerName}_아무일없음`
+    );
+  }
 }
 
     if (
@@ -356,7 +386,7 @@ await saveGame(
       );
 
       const updatedLogs = [
-  `${currentTeam.name}이(가) ${latestLand.name} 구매`,
+  `${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
   ...logs,
 ];
 
@@ -391,10 +421,17 @@ const addScore = async (
         .activity3
     ) || 0;
 
+  const activity4 =
+    Number(
+      scoreInputs[teamIndex]
+        .activity4
+    ) || 0;
+
   const totalScore =
     activity1 * 1 +
-    activity2 * 100 +
-    activity3 * 1000;
+    activity2 * 10 +
+    activity3 * 100 +
+    activity4 * 1000 ;
 
   const updatedTeams = teams.map((team) => ({
     ...team,
@@ -409,7 +446,7 @@ const addScore = async (
   await saveGame(updatedTeams);
 
   setLogs([
-    `${updatedTeams[teamIndex].name} +${totalScore} 마나 획득`,
+    `${updatedTeams[teamIndex].name}_${savedPlayerName}_${totalScore}마나_추가`,
     ...logs,
   ]);
   const updatedInputs = [...scoreInputs];
@@ -418,6 +455,7 @@ updatedInputs[teamIndex] = {
   activity1: "",
   activity2: "",
   activity3: "",
+  activity4: "",
 };
 
 setScoreInputs(updatedInputs);
@@ -467,7 +505,7 @@ const takeoverLand = async () => {
   await saveGame(updatedTeams);
 
   setLogs([
-    `${currentTeam.name}이(가) ${latestLand.name} 인수`,
+    `${currentTeam.name}_${savedPlayerName}_${latestLand.name}_인수`,
     ...logs,
   ]);
 };
@@ -494,18 +532,13 @@ const resetGame = async () => {
   );
 };
 
-if (
-  !myTeam &&
-  typeof window !== "undefined" &&
-  !window.location.search.includes(
-    "team="
-  )
-) {
+
   if (!loaded) {
   return null;
-}
+  }
 
-if (!playerName) {
+if (savedPlayerName === "") {
+  
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
 
@@ -515,79 +548,77 @@ if (!playerName) {
 
       <input
         value={playerName}
-        onChange={(e) =>
-          setPlayerName(e.target.value)
-        }
+        onChange={(e) => {
+  e.stopPropagation();
+  setPlayerName(e.target.value);
+}}
         placeholder="이름 입력"
         className="bg-zinc-800 p-3 rounded-xl w-full"
       />
 
       <button
-        onClick={() => {
-          localStorage.setItem(
-            "playerName",
-            playerName
-          );
-          location.reload();
-        }}
-        className="bg-blue-500 p-3 rounded-xl mt-4"
-      >
-        시작
-      </button>
+  onClick={() => {
+    if (!playerName.trim()) return;
+
+    localStorage.setItem(
+  "playerName",
+  playerName.trim()
+);
+
+setSavedPlayerName(
+  playerName.trim()
+);
+
+  }}
+  className="bg-blue-500 p-3 rounded-xl mt-4"
+>
+  시작
+</button>
 
     </main>
   );
 }
+
+if (!myTeam) {
   return (
     <main className="min-h-screen bg-zinc-900 text-white p-6">
       <h1 className="text-4xl font-bold mb-6">
         팀 선택
       </h1>
-
       <div className="flex flex-col gap-4">
-        {teams.map((team) => (
-          <button
-            key={team.name}
-            onClick={async () => {
-  setMyTeam(team.name);
-  localStorage.setItem(
-  "myTeam",
-  team.name
-);
+  {teams.map((team) => (
+    <button
+      key={team.name}
+      onClick={() => {
 
-  const teamIndex =
-    teams.findIndex(
-      (t) => t.name === team.name
-    );
+        setMyTeam(team.name);
 
+        localStorage.setItem(
+          "myTeam",
+          team.name
+        );
 
-  await setDoc(
-    doc(db, "games", "main"),
-    {
-      teams,
-      logs,
-    }
-  );
-}}
-            className="bg-blue-600 p-4 rounded-xl text-xl font-bold"
-          >
-            {team.name}
-          </button>
-        ))}
-      </div>
-    </main>
+      }}
+      className="bg-blue-600 p-4 rounded-xl text-xl font-bold"
+    >
+      {team.name}
+    </button>
+  ))}
+</div>
+</main>
   );
 }
 
   return (
-    <main
-  className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto"
-  style={{
-  }}
->
-      <h1 className="text-4xl font-bold mb-6">
-        Mana Marble
-      </h1>
+  <main
+    className="min-h-screen bg-cover bg-center text-white p-6 overflow-auto relative"
+    style={{}}
+  >
+
+    <h1 className="text-4xl font-bold mb-6">
+      Mana Marble
+    </h1>
+
 <button
   onClick={() => {
     const password =
@@ -608,6 +639,22 @@ if (!playerName) {
       </div>
 
       <div className="relative w-full h-[900px] bg-zinc-900 rounded-3xl mb-6">
+        <div
+  className="
+  absolute
+  inset-0
+  flex
+  items-center
+  justify-center
+  pointer-events-none
+"
+>
+  <img
+    src="/로고.jpeg"
+    alt="Mana Marble Logo"
+    className="w-[800px] opacity-60"
+  />
+</div>
 
   {board.map((tile, index) => {
 
@@ -615,7 +662,7 @@ if (!playerName) {
     "이벤트",
     "세금",
     "행운",
-    "무인도",
+    "랜덤",
     "축제",
   ].includes(tile.name);
     const owner = getOwner(tile.name);
@@ -866,8 +913,7 @@ if (!playerName) {
           ))}
         </div>
       </div>
-
-<div className="grid grid-cols-2 gap-4">
+  <div className="grid grid-cols-2 gap-4">
   {teams.map((team, index) => (
     <div
       key={team.name}
@@ -907,8 +953,8 @@ if (!playerName) {
     />
 
     <input
-      type="number"
-      placeholder="유효"
+    type="number"
+      placeholder="대학생"
       value={scoreInputs[index].activity2}
       onChange={(e) => {
         const updated = [...scoreInputs];
@@ -923,12 +969,27 @@ if (!playerName) {
 
     <input
       type="number"
-      placeholder="침례"
+      placeholder="유효"
       value={scoreInputs[index].activity3}
       onChange={(e) => {
         const updated = [...scoreInputs];
 
         updated[index].activity3 =
+          e.target.value;
+
+        setScoreInputs(updated);
+      }}
+      className="bg-zinc-700 px-3 py-2 rounded-lg"
+    />
+
+    <input
+      type="number"
+      placeholder="침례"
+      value={scoreInputs[index].activity4}
+      onChange={(e) => {
+        const updated = [...scoreInputs];
+
+        updated[index].activity4 =
           e.target.value;
 
         setScoreInputs(updated);
@@ -948,13 +1009,12 @@ if (!playerName) {
       마나 지급
 </button>
 </div>
-
 )}
     </div>
   ))}
 </div>
   
 
-    </main>
-  );
+</main>
+);
 }
