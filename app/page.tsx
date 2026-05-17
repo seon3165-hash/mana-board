@@ -101,6 +101,8 @@ const [isAdmin, setIsAdmin] =
   useState(false);
 const [myTeam, setMyTeam] =
   useState("");
+  const [showTeams, setShowTeams] =
+  useState(false);
   const [playerName, setPlayerName] =
   useState("");
   const [savedPlayerName, setSavedPlayerName] =
@@ -633,10 +635,49 @@ if (!myTeam) {
   관리자 로그인
 </button>
       <div className="bg-blue-600 p-4 rounded-2xl mb-6">
-        <h2 className="text-2xl font-bold">
-  현재 팀: {myTeam}
-</h2>
-      </div>
+
+  <button
+    onClick={() =>
+      setShowTeams(!showTeams)
+    }
+    className="w-full text-left"
+  >
+    <h2 className="text-2xl font-bold">
+      현재 팀: {myTeam} ▼
+    </h2>
+  </button>
+
+  {showTeams && (
+    <div className="mt-3 flex flex-col gap-2">
+
+      {teams.map((team) => (
+        <button
+          key={team.name}
+          onClick={() => {
+            setMyTeam(team.name);
+
+            localStorage.setItem(
+              "myTeam",
+              team.name
+            );
+
+            setShowTeams(false);
+          }}
+          className="
+          bg-white
+          text-black
+          p-2
+          rounded-xl
+          "
+        >
+          {team.name}
+        </button>
+      ))}
+
+    </div>
+  )}
+
+</div>
 
       <div className="relative w-full h-[900px] bg-zinc-900 rounded-3xl mb-6">
         <div
