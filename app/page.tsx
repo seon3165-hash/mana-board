@@ -751,7 +751,7 @@ if (!myTeam) {
     return (
       <div
         key={index}
-        className={`absolute w-28 h-28 rounded-2xl p-2 text-center border-4 ${
+        className={`absolute w-16 h-16 md:w-28 md:h-28 rounded-2xl p-1 md:p-2 text-center border-4 ${
           owner
   ? owner.color
   : isSpecial
@@ -763,11 +763,11 @@ if (!myTeam) {
           left: position.left,
         }}
       >
-        <div className="font-bold text-sm">
+        <div className="font-bold text-[10px] md:text-sm">
           {tile.name}
         </div>
 
-        <div className="text-xs">
+        <div className="text-[8px] md:text-xs">
           {tile.price > 0
             ? `${tile.price}`
             : "특수"}
