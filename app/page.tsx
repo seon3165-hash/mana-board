@@ -202,7 +202,19 @@ useEffect(() => {
     if (gameSnap.exists()) {
       const data = gameSnap.data();
 
-      setTeams(data.teams || []);
+      setTeams(
+  (data.teams || []).map((team: any) => ({
+    ...team,
+    color:
+      team.name === "용인대1"
+        ? "bg-blue-500"
+      : team.name === "용인대2"
+        ? "bg-pink-500"
+      : team.name === "예과대"
+        ? "bg-yellow-500"
+      : "bg-green-500",
+  }))
+);
       setLogs(data.logs || []);
     }
   };
@@ -522,14 +534,36 @@ const takeoverLand = async () => {
   ]);
 };
 const resetGame = async () => {
-  const resetTeams = teams.map(
-    (team) => ({
-      ...team,
+  const resetTeams = [
+    {
+      name: "용인대1",
+      color: "bg-blue-500",
       mana: 0,
-      lands: [],
       position: 0,
-    })
-  );
+      lands: [],
+    },
+    {
+      name: "용인대2",
+      color: "bg-pink-500",
+      mana: 0,
+      position: 0,
+      lands: [],
+    },
+    {
+      name: "예과대",
+      color: "bg-yellow-500",
+      mana: 0,
+      position: 0,
+      lands: [],
+    },
+    {
+      name: "명지대",
+      color: "bg-green-500",
+      mana: 0,
+      position: 0,
+      lands: [],
+    },
+  ];
 
   setTeams(resetTeams);
 
