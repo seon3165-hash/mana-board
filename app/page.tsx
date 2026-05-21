@@ -293,7 +293,7 @@ if (landedLand.name === "세금") {
   updatedTeams[myIndex].mana -= tax;
 
   newLogs.unshift(
-  `${currentTeam.name}_${savedPlayerName}_${tax}마나_세금지불`
+  `[${getTime()}] ${currentTeam.name}_${savedPlayerName}_${tax}마나_세금지불`
 );
 }
 if (landedLand.name === "행운") {
@@ -318,7 +318,7 @@ if (landedLand.name === "랜덤") {
     updatedTeams[myIndex].mana += 200;
 
     newLogs.unshift(
-`${currentTeam.name}_${savedPlayerName}_200마나_획득`
+`[${getTime()}] ${currentTeam.name}_${savedPlayerName}_200마나_획득`
     );
   }
 
@@ -326,7 +326,7 @@ if (landedLand.name === "랜덤") {
     updatedTeams[myIndex].mana -= 100;
 
     newLogs.unshift(
-`${currentTeam.name}_${savedPlayerName}_100마나_차감`
+`[${getTime()}] ${currentTeam.name}_${savedPlayerName}_100마나_차감`
     );
   }
 
@@ -338,13 +338,13 @@ if (landedLand.name === "랜덤") {
       );
 
     newLogs.unshift(
-`${currentTeam.name}_${savedPlayerName}_랜덤이동`
+`[${getTime()}] ${currentTeam.name}_${savedPlayerName}_랜덤이동`
     );
   }
 
   if (randomEvent === 3) {
     newLogs.unshift(
-`${currentTeam.name}_${savedPlayerName}_아무일없음`
+`[${getTime()}] ${currentTeam.name}_${savedPlayerName}_아무일없음`
     );
   }
 }
@@ -368,10 +368,10 @@ updatedTeams[ownerIndex].mana +=
   toll;
 
       newLogs.unshift(
-        `${currentTeam.name} 통행료 ${toll} 지불`
+        `[${getTime()}] ${currentTeam.name} 통행료 ${toll} 지불`
       );
       newLogs.unshift(
-  `${owner.name} +${toll} 마나 획득`
+  `[${getTime()}] ${owner.name} +${toll} 마나 획득`
 );
     }
 
@@ -410,7 +410,7 @@ await saveGame(
       );
 
       const updatedLogs = [
-  `[${getTime()}]${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
+  `[${getTime()}] ${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
   ...logs,
 ];
 
@@ -470,7 +470,7 @@ const addScore = async (
   await saveGame(updatedTeams);
 
   setLogs([
-    `${updatedTeams[teamIndex].name}_${savedPlayerName}_${totalScore}마나_추가`,
+    `[${getTime()}] ${updatedTeams[teamIndex].name}_${savedPlayerName}_${totalScore}마나_추가`,
     ...logs,
   ]);
   const updatedInputs = [...scoreInputs];
