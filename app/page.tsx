@@ -176,7 +176,17 @@ const currentTeam =
     activity4 * 1000 
   );
 };
-
+const getTime = () => {
+  return new Date().toLocaleString(
+    "ko-KR",
+    {
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
+};
 useEffect(() => {
   const loadGame = async () => {
     const gameRef = doc(
@@ -252,14 +262,14 @@ updatedTeams[myIndex].mana -= 10;
     const newLogs = [...logs];
 
     newLogs.unshift(
-      `${currentTeam.name}_${savedPlayerName}_${landedLand.name}_도착`
-    );
+  `[${getTime()}] ${currentTeam.name}_${savedPlayerName}_${landedLand.name}_도착`
+);
 
     if (landedLand.name === "이벤트") {
   updatedTeams[myIndex].mana += 100;
 
   newLogs.unshift(
-    `${currentTeam.name} +100 마나 획득`
+    `[${getTime()}] ${currentTeam.name} +100 마나 획득`
   );
 }
 
@@ -388,7 +398,7 @@ await saveGame(
       );
 
       const updatedLogs = [
-  `${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
+  `[${getTime()}]${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
   ...logs,
 ];
 
@@ -507,7 +517,7 @@ const takeoverLand = async () => {
   await saveGame(updatedTeams);
 
   setLogs([
-    `${currentTeam.name}_${savedPlayerName}_${latestLand.name}_인수`,
+    `[${getTime()}]${currentTeam.name}_${savedPlayerName}_${latestLand.name}_인수`,
     ...logs,
   ]);
 };
