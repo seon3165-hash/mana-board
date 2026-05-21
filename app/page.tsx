@@ -56,21 +56,21 @@ export default function Home() {
     },
     {
       name: "용인대2",
-      color: "bg-green-500",
+      color: "bg-pink-500",
       mana: 1000,
       position: 0,
       lands: [] as string[],
     },
     {
       name: "예과대",
-      color: "bg-red-500",
+      color: "bg-yellow-500",
       mana: 1000,
       position: 0,
       lands: [] as string[],
     },
     {
       name: "명지대",
-      color: "bg-yellow-500",
+      color: "bg-green-500",
       mana: 1000,
       position: 0,
       lands: [] as string[],
@@ -804,7 +804,7 @@ const positions = isMobile
           owner
   ? owner.color
   : isSpecial
-    ? "bg-amber-400 border-yellow-100 text-black"
+    ? "bg-gray-300 border-gray-100 text-black"
     : "bg-zinc-800"
         }`}
         style={{
@@ -858,7 +858,7 @@ const positions = isMobile
           !getOwner(currentLand.name) && (
             <button
               onClick={buyLand}
-              className="mt-4 bg-green-500 px-4 py-2 rounded-xl font-bold"
+              className="mt-4 bg-pink-500 px-4 py-2 rounded-xl font-bold"
             >
               땅 구매
             </button>
@@ -1094,7 +1094,7 @@ const positions = isMobile
 
     <button
       onClick={() => addScore(index)}
-      className="bg-green-500 px-4 py-2 rounded-lg font-bold"
+      className="bg-pink-500 px-4 py-2 rounded-lg font-bold"
     >
       마나 지급
 </button>
