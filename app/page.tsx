@@ -46,35 +46,50 @@ export default function Home() {
   { name: "상하이", price: 500 },
 ];
 
-  const [teams, setTeams] = useState([
+  const [teams, setTeams] = useState<{
+  name: string;
+  color: string;
+  mana: number;
+  position: number;
+  lap: number;
+  lands: {
+    name: string;
+    houses: number;
+    lap: number;
+  }[];
+}[]>([
     {
-      name: "용인대1",
-      color: "bg-blue-500",
-      mana: 1000,
-      position: 0,
-      lands: [] as string[],
-    },
-    {
-      name: "용인대2",
-      color: "bg-pink-500",
-      mana: 1000,
-      position: 0,
-      lands: [] as string[],
-    },
-    {
-      name: "예과대",
-      color: "bg-yellow-500",
-      mana: 1000,
-      position: 0,
-      lands: [] as string[],
-    },
-    {
-      name: "명지대",
-      color: "bg-green-500",
-      mana: 1000,
-      position: 0,
-      lands: [] as string[],
-    },
+  name: "용인대1",
+  color: "bg-blue-300",
+  mana: 0,
+  position: 0,
+  lap: 0,
+  lands: [],
+},
+{
+  name: "용인대2",
+  color: "bg-pink-300",
+  mana: 0,
+  position: 0,
+  lap: 0,
+  lands: [],
+},
+{
+  name: "예과대",
+  color: "bg-yellow-500",
+  mana: 0,
+  position: 0,
+  lap: 0,
+  lands: [],
+},
+{
+  name: "명지대",
+  color: "bg-green-500",
+  mana: 0,
+  position: 0,
+  lap: 0,
+  lands: [],
+},
   ]);
 
   const [dice, setDice] = useState(1);
@@ -82,6 +97,10 @@ export default function Home() {
   const [logs, setLogs] = useState<string[]>(
     []
   );
+
+  const [notice, setNotice] =
+  useState("");
+
 const [scoreInputs, setScoreInputs] =
   useState(
     teams.map(() => ({
@@ -202,44 +221,63 @@ useEffect(() => {
     if (gameSnap.exists()) {
       const data = gameSnap.data();
 
-      setTeams(
+  setTeams(
   (data.teams || []).map((team: any) => ({
     ...team,
+    lap: team.lap ?? 0,
+    lands: (team.lands || []).map(
+      (land: any) => ({
+        ...land,
+        houses: land.houses ?? 1,
+        lap: land.lap ?? 0,
+      })
+    ),
     color:
       team.name === "용인대1"
-        ? "bg-blue-500"
+        ? "bg-slate-700"
       : team.name === "용인대2"
-        ? "bg-pink-500"
+        ? "bg-slate-700"
       : team.name === "예과대"
-        ? "bg-yellow-500"
-      : "bg-green-500",
+        ? "bg-slate-700"
+      : "bg-slate-700",
   }))
 );
-      setLogs(data.logs || []);
-    }
-  };
-  loadGame();
+setLogs(data.logs || []);
+
+setNotice(
+  data.notice || ""
+);
+
+}
+};
+
+loadGame();
+
 }, []);
+
   const currentLand =
   board[currentTeam.position] ||
   board[0];
 
   const getOwner = (landName: string) => {
-    return teams.find((team) =>
-      team.lands.includes(landName)
-    );
-  };
+  return teams.find((team) =>
+    team.lands.some(
+      (land) => land.name === landName
+    )
+  );
+};
 const saveGame = async (
   updatedTeams: typeof teams,
   updatedLogs = logs,
 ) => {
   await setDoc(
-    doc(db, "games", "main"),
-    {
-      teams: updatedTeams,
-      logs: updatedLogs,
-    }
-  );
+  doc(db, "games", "main"),
+  {
+    teams: updatedTeams,
+    logs: updatedLogs,
+    notice,
+  }
+);
 };
   const rollDice = async () => {
 
@@ -259,10 +297,19 @@ if (updatedTeams[myIndex].mana < 10) {
 }
 
 updatedTeams[myIndex].mana -= 10;
-    updatedTeams[myIndex].position =
-      (updatedTeams[myIndex].position +
-        randomNumber) %
-      board.length;
+    const oldPosition =
+  updatedTeams[myIndex].position;
+
+const newPosition =
+  (oldPosition + randomNumber) %
+  board.length;
+
+if (newPosition < oldPosition) {
+  updatedTeams[myIndex].lap += 1;
+}
+
+updatedTeams[myIndex].position =
+  newPosition;
 
     const landedLand =
       board[
@@ -353,8 +400,19 @@ if (landedLand.name === "랜덤") {
       owner &&
       owner.name !== myTeam
     ) {
-      const toll = Math.floor(
-  landedLand.price * 0.1
+      const ownerLand =
+  owner.lands.find(
+    (land) =>
+      land.name === landedLand.name
+  );
+
+const houseCount =
+  ownerLand?.houses || 1;
+
+const toll = Math.floor(
+  landedLand.price *
+  0.1 *
+  houseCount
 );
 
 updatedTeams[myIndex].mana -=
@@ -392,25 +450,54 @@ await saveGame(
     board[currentTeam.position];
 
   if (
-    latestLand.price > 0 &&
-    currentTeam.mana >= latestLand.price &&
-    !getOwner(latestLand.name)
-      
-    ) {
+  latestLand.price > 0 &&
+  currentTeam.mana >= latestLand.price &&
+  (
+    !getOwner(latestLand.name) ||
+    getOwner(latestLand.name)?.name === myTeam
+  )
+)
+       {
       const updatedTeams = teams.map((team) => ({
-        ...team,
-        lands: [...team.lands],
-      }));
+  ...team,
+  lands: [...team.lands],
+}));
 
-      updatedTeams[myIndex].mana -=
+updatedTeams[myIndex].mana -=
   latestLand.price;
 
-      updatedTeams[myIndex].lands.push(
-        latestLand.name
-      );
+const existingLand =
+  updatedTeams[myIndex].lands.find(
+    (land) =>
+      land.name === latestLand.name
+  );
 
-      const updatedLogs = [
-  `[${getTime()}] ${currentTeam.name}_${savedPlayerName}_${latestLand.name}_구매`,
+if (existingLand) {
+
+  if (
+    existingLand.houses < 2 &&
+    updatedTeams[myIndex].lap >
+      existingLand.lap
+  ) {
+
+    existingLand.houses += 1;
+
+    existingLand.lap =
+      updatedTeams[myIndex].lap;
+  }
+
+} else {
+
+  updatedTeams[myIndex].lands.push({
+    name: latestLand.name,
+    houses: 1,
+    lap: updatedTeams[myIndex].lap ?? 0,
+  });
+
+}
+
+const updatedLogs = [
+  `[${getTime()}] ${currentTeam.name}_${savedPlayerName}_${latestLand.name}_${existingLand ? "집추가" : "구매"}`,
   ...logs,
 ];
 
@@ -420,7 +507,7 @@ setLogs(updatedLogs);
 
 await saveGame(
   updatedTeams,
-  updatedLogs,
+  updatedLogs
 );
     }
   };
@@ -490,14 +577,29 @@ const takeoverLand = async () => {
   const latestLand =
     board[currentTeam.position];
 
-  const owner = getOwner(latestLand.name);
+ const owner = getOwner(
+  latestLand.name
+);
 
-  if (
-    !owner ||
-    owner.name === currentTeam.name
-  ) {
-    return;
-  }
+if (
+  !owner ||
+  owner.name === currentTeam.name
+) {
+  return;
+}
+
+const ownerLand =
+  owner.lands.find(
+    (land) =>
+      land.name === latestLand.name
+  );
+
+if (
+  ownerLand &&
+  ownerLand.houses >= 2
+) {
+  return;
+}
 
   const cost = latestLand.price * 2;
 
@@ -515,13 +617,16 @@ const takeoverLand = async () => {
   );
 
   updatedTeams[ownerIndex].lands =
-    updatedTeams[ownerIndex].lands.filter(
-      (land) => land !== latestLand.name
-    );
-
-  updatedTeams[myIndex].lands.push(
-    latestLand.name
+  updatedTeams[ownerIndex].lands.filter(
+    (land) =>
+      land.name !== latestLand.name
   );
+
+  updatedTeams[myIndex].lands.push({
+  name: latestLand.name,
+  houses: 1,
+  lap: updatedTeams[myIndex].lap ?? 0,
+});
 
   updatedTeams[myIndex].mana -= cost;
 
@@ -537,32 +642,52 @@ const resetGame = async () => {
   const resetTeams = [
     {
       name: "용인대1",
-      color: "bg-blue-500",
+      color: "bg-blue-300",
       mana: 0,
       position: 0,
-      lands: [],
+  lap: 0,
+  lands: [] as {
+  name: string;
+  houses: number;
+  lap: number;
+}[],
     },
     {
       name: "용인대2",
-      color: "bg-pink-500",
+      color: "bg-pink-300",
       mana: 0,
       position: 0,
-      lands: [],
+  lap: 0,
+  lands: [] as {
+  name: string;
+  houses: number;
+  lap: number;
+}[],
     },
     {
       name: "예과대",
       color: "bg-yellow-500",
       mana: 0,
       position: 0,
-      lands: [],
+  lap: 0,
+  lands: [] as {
+  name: string;
+  houses: number;
+  lap: number;
+}[],
     },
     {
-      name: "명지대",
-      color: "bg-green-500",
-      mana: 0,
-      position: 0,
-      lands: [],
-    },
+  name: "명지대",
+  color: "bg-green-500",
+  mana: 0,
+  position: 0,
+  lap: 0,
+  lands: [] as {
+  name: string;
+  houses: number;
+  lap: number;
+}[],
+},
   ];
 
   setTeams(resetTeams);
@@ -835,11 +960,48 @@ const positions = isMobile
       <div
         key={index}
         className={`absolute w-16 h-16 md:w-32 md:h-32 rounded-2xl p-1 md:p-2 text-center border-4 ${
-          owner
-  ? owner.color
-  : isSpecial
-    ? "bg-gray-300 border-gray-100 text-black"
-    : "bg-zinc-800"
+index === 0
+? "bg-cyan-400 border-purple-400"
+
+: teams.filter(
+    (team) =>
+      team.position === index
+  ).length > 1
+
+? "bg-purple-400"
+
+: teams.some(
+    (team) =>
+      team.position === index
+  )
+
+? (
+    teams.find(
+      (team) =>
+        team.position === index
+    )?.name === "용인대1"
+      ? "bg-blue-400"
+    : teams.find(
+        (team) =>
+          team.position === index
+      )?.name === "용인대2"
+      ? "bg-[#ea8dc0]"
+    : teams.find(
+        (team) =>
+          team.position === index
+      )?.name === "예과대"
+      ? "bg-amber-300"
+    : "bg-lime-400"
+)
+
+: owner
+? owner.color
+
+: isSpecial
+? "bg-gray-300 border-gray-100 text-black"
+
+: "bg-zinc-800"
+
         }`}
         style={{
           top: position.top,
@@ -857,26 +1019,96 @@ const positions = isMobile
         </div>
 
         {owner && (
-          <div className="text-[5px] md:text-xs mt-1">
-            🏠 {owner.name}
-          </div>
-        )}
+  <div className="flex justify-center items-center gap-1 mt-1">
 
-        <div className="text-xs mt-1">
-          {teams
-            .filter(
-              (team) =>
-                team.position === index
-            )
-            .map((team) => (
-              <div key={team.name}>
-                🚶
-              </div>
-            ))}
-        </div>
+    {(() => {
+
+  const houseCount =
+    owner.lands.find(
+      (land) =>
+        land.name === tile.name
+    )?.houses || 1;
+
+  const castleImage =
+    owner.name === "용인대1"
+      ? "/castle-y1.png"
+    : owner.name === "용인대2"
+      ? "/castle-y2.png"
+    : owner.name === "예과대"
+      ? "/castle-A.png"
+    : "/castle-M.png";
+
+  const flagImage =
+    owner.name === "용인대1"
+      ? "/flag-y1.png"
+    : owner.name === "용인대2"
+      ? "/flag-y2.png"
+    : owner.name === "예과대"
+      ? "/flag-A.png"
+    : "/flag-M.png";
+
+  return houseCount === 1 ? (
+    <div className="flex justify-center">
+      <img
+        src={flagImage}
+        className="
+          w-8 h-8
+          md:w-12 md:h-12
+          object-contain
+          scale-150
+          translate-y-2
+        "
+      />
+    </div>
+  ) : (
+    <div className="flex justify-center">
+      <img
+        src={castleImage}
+        className="
+w-16 h-16
+md:w-24 md:h-24
+object-contain
+-translate-y-4
+"
+      />
+    </div>
+  );
+
+})()}
+
+
+  </div>
+)}
       </div>
     );
   })}
+</div>
+    <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
+  <h2 className="text-2xl font-bold mb-4">
+    🎲 주사위
+  </h2>
+
+  <div className="text-6xl font-bold mb-4">
+    {dice}
+  </div>
+
+  <div className="flex gap-4 border-4 border-red-500 p-4">
+    <button
+      onClick={rollDice}
+      className="bg-white text-black px-6 py-3 rounded-xl text-lg font-bold"
+    >
+      주사위 굴리기
+    </button>
+
+    {isAdmin && (
+      <button
+        onClick={resetGame}
+        className="bg-red-600 px-6 py-3 rounded-xl text-lg font-bold"
+      >
+        새 게임
+      </button>
+    )}
+  </div>
 </div>
 
       <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
@@ -889,22 +1121,70 @@ const positions = isMobile
         </p>
 
         {currentLand.price > 0 &&
-          !getOwner(currentLand.name) && (
-            <button
-              onClick={buyLand}
-              className="mt-4 bg-pink-500 px-4 py-2 rounded-xl font-bold"
-            >
-              땅 구매
-            </button>
-          )}
-          {(() => {
-  const owner = getOwner(
-    board[currentTeam.position].name
-  );
+(() => {
+
+  const owner =
+    getOwner(currentLand.name);
+
+  const ownerLand =
+    owner?.lands.find(
+      (land) =>
+        land.name === currentLand.name
+    );
+
+  // 빈 땅
+  if (!owner)
+    return true;
+
+  // 내 땅
+  if (owner.name === myTeam) {
+
+    // 성 완성
+    if (
+      ownerLand?.houses === 2
+    )
+      return false;
+
+    // 같은 바퀴
+    if (
+      ownerLand?.lap ===
+      currentTeam.lap
+    )
+      return false;
+
+    return true;
+  }
+
+  return false;
+
+})() && (
+
+  <button
+    onClick={buyLand}
+    className="mt-4 bg-pink-500 px-4 py-2 rounded-xl font-bold"
+  >
+    땅 구매
+  </button>
+
+)}
+{(() => {
+
+  const owner =
+    getOwner(
+      board[currentTeam.position].name
+    );
+
+  const ownerLand =
+    owner?.lands.find(
+      (land) =>
+        land.name ===
+        board[currentTeam.position].name
+    );
 
   return (
     owner &&
-    owner.name !== myTeam && (
+    owner.name !== myTeam &&
+    ownerLand?.houses !== 2 && (
       <button
         onClick={takeoverLand}
         className="mt-4 ml-4 bg-red-500 px-4 py-2 rounded-xl font-bold"
@@ -913,6 +1193,7 @@ const positions = isMobile
       </button>
     )
   );
+
 })()}
 
       </div>
@@ -929,21 +1210,21 @@ const positions = isMobile
           (sum, land) =>
             sum +
             (board.find(
-              (b) => b.name === land
-            )?.price || 0),
+  (b) => b.name === land.name
+)?.price || 0),
           0
         );
 
       const bTotal =
-        b.mana +
-        b.lands.reduce(
-          (sum, land) =>
-            sum +
-            (board.find(
-              (b2) => b2.name === land
-            )?.price || 0),
-          0
-        );
+  b.mana +
+  b.lands.reduce(
+    (sum, land) =>
+      sum +
+      (board.find(
+        (b2) => b2.name === land.name
+      )?.price || 0),
+    0
+  );
 
       return bTotal - aTotal;
     })
@@ -955,8 +1236,8 @@ const positions = isMobile
           (sum, land) =>
             sum +
             (board.find(
-              (b) => b.name === land
-            )?.price || 0),
+  (b) => b.name === land.name
+)?.price || 0),
           0
         );
 
@@ -989,36 +1270,70 @@ const positions = isMobile
     })}
 </div>
 
-    <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
-  <h2 className="text-2xl font-bold mb-4">
-    🎲 주사위
-  </h2>
-
-  <div className="text-6xl font-bold mb-4">
-    {dice}
-  </div>
-
-  <div className="flex gap-4 border-4 border-red-500 p-4">
-    <button
-      onClick={rollDice}
-      className="bg-white text-black px-6 py-3 rounded-xl text-lg font-bold"
-    >
-      주사위 굴리기
-    </button>
-
-    {isAdmin && (
-      <button
-        onClick={resetGame}
-        className="bg-red-600 px-6 py-3 rounded-xl text-lg font-bold"
-      >
-        새 게임
-      </button>
-    )}
-  </div>
-</div>
 
       <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
         <h2 className="text-2xl font-bold mb-4">
+          <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
+
+  <h2 className="text-2xl font-bold mb-4">
+    📢 공지사항
+  </h2>
+
+  <div className="bg-zinc-700 p-3 rounded-lg">
+    {notice || "공지 없음"}
+  </div>
+
+  {isAdmin && (
+    <div className="mt-4">
+
+      <input
+        value={notice}
+        onChange={(e) =>
+          setNotice(
+            e.target.value
+          )
+        }
+        placeholder="공지 입력"
+        className="
+        w-full
+        bg-zinc-700
+        p-3
+        rounded-lg
+        "
+      />
+
+      <button
+        onClick={async () => {
+
+          await setDoc(
+            doc(
+              db,
+              "games",
+              "main"
+            ),
+            {
+              teams,
+              logs,
+              notice,
+            }
+          );
+
+        }}
+        className="
+        mt-3
+        bg-blue-500
+        px-4 py-2
+        rounded-xl
+        font-bold
+        "
+      >
+        공지 저장
+      </button>
+
+    </div>
+  )}
+
+</div>
           게임 로그
         </h2>
 
@@ -1054,8 +1369,15 @@ const positions = isMobile
       <p className="mb-3">
   보유 땅:
   {team.lands.length > 0
-    ? team.lands.join(", ")
-    : " 없음"}
+  ? team.lands
+      .map(
+        (land) =>
+          `${land.name} ${"🏠".repeat(
+            land.houses
+          )}`
+      )
+      .join(", ")
+  : " 없음"}
 </p>
 
 {team.name === myTeam && (
