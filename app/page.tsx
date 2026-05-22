@@ -1286,21 +1286,22 @@ object-contain
   {isAdmin && (
     <div className="mt-4">
 
-      <input
-        value={notice}
-        onChange={(e) =>
-          setNotice(
-            e.target.value
-          )
-        }
-        placeholder="공지 입력"
-        className="
-        w-full
-        bg-zinc-700
-        p-3
-        rounded-lg
-        "
-      />
+      <textarea
+value={notice}
+onChange={(e)=>
+setNotice(
+e.target.value
+)}
+placeholder="공지 입력"
+rows={4}
+className="
+w-full
+bg-zinc-700
+p-3
+rounded-lg
+resize-none
+"
+/>
 
       <button
         onClick={async () => {
