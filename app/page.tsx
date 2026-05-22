@@ -1159,12 +1159,16 @@ object-contain
 
 })() && (
 
-  <button
-    onClick={buyLand}
-    className="mt-4 bg-pink-500 px-4 py-2 rounded-xl font-bold"
-  >
-    땅 구매
-  </button>
+<button
+  onClick={buyLand}
+  className="mt-4 bg-pink-500 px-4 py-2 rounded-xl font-bold"
+>
+  땅 구매
+  <div className="text-xs mt-1">
+    {currentLand.price} /
+    {currentTeam.mana}
+  </div>
+</button>
 
 )}
 {(() => {
@@ -1186,11 +1190,17 @@ object-contain
     owner.name !== myTeam &&
     ownerLand?.houses !== 2 && (
       <button
-        onClick={takeoverLand}
-        className="mt-4 ml-4 bg-red-500 px-4 py-2 rounded-xl font-bold"
-      >
-        인수하기
-      </button>
+  onClick={takeoverLand}
+  className="mt-4 ml-4 bg-red-500 px-4 py-2 rounded-xl font-bold"
+>
+  인수하기
+
+  <div className="text-xs mt-1">
+    {currentLand.price * 2} /
+    {currentTeam.mana}
+  </div>
+
+</button>
     )
   );
 
@@ -1276,12 +1286,19 @@ object-contain
           <div className="bg-zinc-800 p-6 rounded-2xl mb-6">
 
   <h2 className="text-2xl font-bold mb-4">
-    📢 공지사항
+    📢 공지 및 각팀 전략서
   </h2>
 
-  <div className="bg-zinc-700 p-3 rounded-lg">
-    {notice || "공지 없음"}
-  </div>
+  <div
+  className="
+  bg-zinc-700
+  p-3
+  rounded-lg
+  whitespace-pre-line
+  "
+>
+  {notice || "공지 없음"}
+</div>
 
   {isAdmin && (
     <div className="mt-4">
