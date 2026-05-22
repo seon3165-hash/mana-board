@@ -1050,27 +1050,29 @@ index === 0
   return houseCount === 1 ? (
     <div className="flex justify-center">
       <img
-        src={flagImage}
-        className="
-          w-8 h-8
-          md:w-12 md:h-12
-          object-contain
-          scale-150
-          translate-y-2
-        "
-      />
+  src={flagImage}
+  className="
+    w-6 h-6
+    md:w-12 md:h-12
+    object-contain
+    md:scale-150
+    translate-y-1
+    md:translate-y-2
+  "
+/>
     </div>
   ) : (
     <div className="flex justify-center">
       <img
-        src={castleImage}
-        className="
-w-16 h-16
-md:w-24 md:h-24
-object-contain
--translate-y-4
+  src={castleImage}
+  className="
+    w-10 h-10
+    md:w-24 md:h-24
+    object-contain
+    -translate-y-1
+    md:-translate-y-4
 "
-      />
+/>
     </div>
   );
 
@@ -1195,7 +1197,7 @@ object-contain
 >
   인수하기
 
-  <div className="text-xs mt-1">
+  <div className="text-lg font-bold mt-2">
     {currentLand.price * 2} /
     {currentTeam.mana}
   </div>
